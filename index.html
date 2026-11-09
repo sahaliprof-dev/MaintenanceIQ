@@ -95,8 +95,9 @@ th{font-weight:600;color:var(--muted);font-size:15px}
 .log{display:grid;gap:8px}
 .log div{display:flex;flex-wrap:wrap;gap:2px 12px;justify-content:space-between;border-top:1px solid var(--line);padding-top:8px}
 .log span{color:var(--muted);font-size:15px}
-.plates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-@media(max-width:860px){.plates{grid-template-columns:minmax(0,1fr)}}
+.plates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media(max-width:1100px){.plates{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.plates{grid-template-columns:minmax(0,1fr)}}
 .plate{position:relative;background-color:var(--plate);padding:28px 24px 24px;display:flex;flex-direction:column;gap:10px;border-radius:4px;
   background-image:radial-gradient(circle 5px at 12px 12px,var(--rivet) 98%,transparent),radial-gradient(circle 5px at calc(100% - 12px) 12px,var(--rivet) 98%,transparent),radial-gradient(circle 5px at 12px calc(100% - 12px),var(--rivet) 98%,transparent),radial-gradient(circle 5px at calc(100% - 12px) calc(100% - 12px),var(--rivet) 98%,transparent)}
 .plate.hi{background-color:var(--enamel);color:var(--on-enamel);--rivet:var(--enamel-line)}
@@ -195,10 +196,11 @@ footer{border-top:1px solid var(--line);padding-block:20px;color:var(--muted);fo
     <article class="plate hi"><h3>Pilote</h3><div class="price">0 €<small> 30 jours</small></div><p>Pour les premiers sites de Mayotte : 5 machines, suivies avec vous à distance par téléphone ou WhatsApp.</p><button type="button" class="btn ghost" data-ask="Pilote gratuit">Demander le pilote</button></article>
     <article class="plate"><h3>Essentiel</h3><div class="price">45 €<small>/mois</small></div><p>Jusqu’à 10 machines. Envoyez vos rapports par WhatsApp ou e-mail : nous tenons l’historique de chaque machine et vous envoyons un récapitulatif chaque mois.</p><a class="btn" href="https://buy.stripe.com/7sY00kcgFfJLcLdenhgfu00" target="_blank" rel="noopener">S’abonner à 45 € par mois</a></article>
     <article class="plate"><h3>Pro</h3><div class="price">70 €<small>/mois</small></div><p>Jusqu’à 30 machines. Le même suivi, avec un récapitulatif mensuel classé par urgence.</p><a class="btn" href="https://buy.stripe.com/7sYbJ2eoN1SVdPhgvpgfu01" target="_blank" rel="noopener">S’abonner à 70 € par mois</a></article>
+    <article class="plate"><h3>Entreprise</h3><div class="price">120 €<small>/mois</small></div><p>Jusqu’à 60 machines, sur plusieurs ateliers ou sites. Le même suivi que Pro, avec un récapitulatif mensuel classé par urgence.</p><a class="btn" href="https://buy.stripe.com/5kQ9AU5Sh9ln4eHfrlgfu03" target="_blank" rel="noopener">S’abonner à 120 € par mois</a></article>
   </div>
   <div class="two" style="margin-top:28px;align-items:center">
     <div><h3>Diagnostiquer avant la panne</h3><p style="margin-top:6px;color:var(--muted)">Le guide de la maintenance conditionnelle en 4 chapitres, pour repérer les défauts avant l’arrêt de production. 29 €.</p></div>
-    <div><a class="btn" href="https://buy.stripe.com/7sY8wRedS9W0dwua4r2Ry04" target="_blank" rel="noopener">Acheter l’e-book</a></div>
+    <div><a class="btn" href="https://buy.stripe.com/cNieVea8x0ORcLd92Xgfu02" target="_blank" rel="noopener">Acheter l’e-book</a></div>
   </div>
 </div></section>
 
