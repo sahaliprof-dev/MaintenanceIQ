@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<title>MaintenanceIQ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Diagnostic de machine sur téléphone, sans capteur et sans compte, pour les petits sites industriels de Mayotte.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a phone-first field card in machine enamel green. Pick the machine, tap what you see, read the verdict plate, send it. */
+:root{
+  --bg:#DFE3DC; --bg-2:#EDF0EA; --ink:#14201D; --muted:#4A5A55; --line:#B4BDB5;
+  --plate:#CBD1CA; --rivet:#8C9690;
+  --enamel:#21403A; --enamel-2:#2C4F47; --enamel-line:#47695F; --on-enamel:#F0F3E9; --on-enamel-2:#BCCDC4;
+  --good:#79D49B; --watch:#F2CC55; --alert:#F39A4C; --crit:#FF8370; --zone-ink:#14201D;
+  --btn:#21403A; --btn-ink:#F0F3E9;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121A18; --bg-2:#19231F; --ink:#E8EDE5; --muted:#A5B4AC; --line:#34443E;
+  --plate:#26332E; --rivet:#55655E;
+  --enamel:#1D3831; --enamel-2:#274A41; --enamel-line:#41645A;
+  --btn:#E8EDE5; --btn-ink:#14201D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121A18; --bg-2:#19231F; --ink:#E8EDE5; --muted:#A5B4AC; --line:#34443E;
+  --plate:#26332E; --rivet:#55655E;
+  --enamel:#1D3831; --enamel-2:#274A41; --enamel-line:#41645A;
+  --btn:#E8EDE5; --btn-ink:#14201D; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1040px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:3px solid var(--watch);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);line-height:1;margin:0;text-wrap:balance}
+h2{font-size:clamp(36px,6vw,60px);font-weight:800}
+h3{font-size:27px;font-weight:700}
+p{margin:0}
+.lead{max-width:60ch;color:var(--muted);font-size:18px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:8px 20px;min-height:56px}
+.brand{font-family:var(--display);font-weight:900;font-size:26px;text-decoration:none;color:inherit;margin-right:auto}
+.bar a.lk{font-weight:600;font-size:15px;color:var(--muted);text-decoration:none}
+.hero{padding-block:24px 22px}
+.hero h1{font-size:clamp(46px,9vw,92px);font-weight:900;line-height:.92;max-width:15ch}
+.hero .lead{margin-top:14px}
+
+.inst{background:var(--enamel);color:var(--on-enamel)}
+.inst .wrap{padding-block:24px 30px;display:grid;gap:22px}
+.deck{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px 40px;align-items:start}
+@media(max-width:820px){.deck{grid-template-columns:minmax(0,1fr)}}
+.step{display:grid;gap:10px;min-width:0}
+.step+.step{margin-top:20px}
+.step>h2{font-size:27px;font-weight:700}
+.step>p{color:var(--on-enamel-2);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:none;color:var(--on-enamel);border:1px solid var(--enamel-line);border-radius:3px;padding:10px 12px;font:500 16px var(--body);cursor:pointer;min-height:44px}
+.chip[aria-pressed="true"]{background:var(--on-enamel);color:var(--enamel);border-color:var(--on-enamel);font-weight:700}
+.syms{display:grid;gap:6px}
+.sym{display:flex;gap:12px;align-items:center;padding:9px 10px;border:1px solid var(--enamel-line);border-radius:3px;cursor:pointer;min-height:46px;font-size:16px}
+.sym input{width:22px;height:22px;flex:none;accent-color:var(--watch)}
+.sym:has(input:checked){background:var(--enamel-2);border-color:var(--on-enamel-2)}
+details.mes{border:1px solid var(--enamel-line);border-radius:3px;padding:10px 12px}
+details.mes summary{font-weight:600;cursor:pointer}
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.f{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--on-enamel-2);min-width:0}
+.f input,.f textarea{background:var(--enamel-2);color:var(--on-enamel);border:1px solid var(--enamel-line);border-radius:3px;padding:9px;font:500 16px var(--body);width:100%;min-width:0}
+
+.verdict{--lv:var(--watch);background:var(--bg-2);color:var(--ink);border-radius:4px;overflow:hidden;position:sticky;top:72px}
+@media(max-width:820px){.verdict{position:static}}
+.vhead{background:var(--lv);color:var(--zone-ink);padding:14px 16px}
+.vhead b{display:block;font:900 clamp(44px,8vw,64px)/.95 var(--display)}
+.vhead span{font-weight:700;font-size:18px}
+.vbody{padding:16px;display:grid;gap:14px}
+.vbody h3{font-size:22px;margin-bottom:4px}
+.vbody ul{margin:0;padding-left:20px}
+.vbody li{margin-bottom:3px}
+.ex{font-size:14px;color:var(--muted)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-block;background:var(--btn);color:var(--btn-ink);border:1px solid var(--btn);border-radius:3px;padding:12px 16px;font:600 16px var(--body);text-decoration:none;cursor:pointer;text-align:center}
+.btn.ghost{background:none;color:inherit;border-color:currentColor}
+
+section.s{padding-block:clamp(44px,7vw,80px)}
+.alt{background:var(--bg-2)}
+.head{display:grid;gap:12px;margin-bottom:28px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 48px}
+@media(max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}
+.two ul{margin:10px 0 0;padding-left:20px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:440px}
+th,td{text-align:left;padding:9px 12px 9px 0;border-top:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:15px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:7px;background:var(--c)}
+.log{display:grid;gap:8px}
+.log div{display:flex;flex-wrap:wrap;gap:2px 12px;justify-content:space-between;border-top:1px solid var(--line);padding-top:8px}
+.log span{color:var(--muted);font-size:15px}
+.plates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media(max-width:860px){.plates{grid-template-columns:minmax(0,1fr)}}
+.plate{position:relative;background-color:var(--plate);padding:28px 24px 24px;display:flex;flex-direction:column;gap:10px;border-radius:4px;
+  background-image:radial-gradient(circle 5px at 12px 12px,var(--rivet) 98%,transparent),radial-gradient(circle 5px at calc(100% - 12px) 12px,var(--rivet) 98%,transparent),radial-gradient(circle 5px at 12px calc(100% - 12px),var(--rivet) 98%,transparent),radial-gradient(circle 5px at calc(100% - 12px) calc(100% - 12px),var(--rivet) 98%,transparent)}
+.plate.hi{background-color:var(--enamel);color:var(--on-enamel);--rivet:var(--enamel-line)}
+.plate h3{font-size:34px}
+.price{font:900 50px/1 var(--display)}
+.price small{font-size:19px;font-weight:700}
+.plate p{flex:1}
+details.q{border-top:1px solid var(--line);padding-block:12px}
+details.q summary{font-weight:600;cursor:pointer}
+details.q p{margin-top:8px;color:var(--muted);max-width:66ch}
+.mail{font:800 clamp(25px,6vw,38px)/1.1 var(--display);overflow-wrap:anywhere;user-select:all;margin-top:10px}
+#msg{width:100%;min-height:150px;background:var(--bg-2);color:var(--ink);border:1px solid var(--line);border-radius:3px;padding:12px;font:400 16px/1.5 var(--body)}
+footer{border-top:1px solid var(--line);padding-block:20px;color:var(--muted);font-size:15px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head><body>
+<header class="top"><div class="wrap bar">
+  <a class="brand" href="#diagnostic">MaintenanceIQ</a>
+  <a class="lk" href="#pilote">Pilote gratuit</a>
+</div></header>
+
+<main>
+<div class="hero"><div class="wrap">
+  <h1>Votre machine a un souci&nbsp;? Sachez quoi faire en 2 minutes.</h1>
+  <p class="lead">Un diagnostic simple sur téléphone, sans capteur, sans compte et sans logiciel à installer. Pensé pour les petits sites industriels de Mayotte.</p>
+</div></div>
+
+<section class="inst" id="diagnostic" aria-label="Diagnostic"><div class="wrap"><div class="deck">
+  <form id="ctl" onsubmit="return false">
+    <div class="step">
+      <h2>1. Quelle machine ?</h2>
+      <div class="chips" id="machines"></div>
+    </div>
+    <div class="step">
+      <h2>2. Que constatez-vous ?</h2>
+      <p>Regardez et écoutez sans toucher une machine en marche.</p>
+      <div class="syms" id="syms"></div>
+      <label class="sym" for="salt"><input type="checkbox" id="salt"><span>Site proche de la mer ou air salin</span></label>
+      <details class="mes">
+        <summary>J’ai des mesures (facultatif)</summary>
+        <div class="mgrid">
+          <label class="f" for="m-kw">Puissance (kW)<input id="m-kw" type="number" inputmode="decimal" min="0" step="any"></label>
+          <label class="f" for="m-vib">Vibration (mm/s RMS)<input id="m-vib" type="number" inputmode="decimal" min="0" step="any"></label>
+        </div>
+      </details>
+      <label class="f" for="name">Nom de la machine ou lieu (facultatif)<input id="name" type="text" autocomplete="off" placeholder="Ex. : pompe du forage"></label>
+    </div>
+  </form>
+
+  <div class="verdict" id="verdict" aria-live="polite">
+    <div class="vhead"><b id="vLevel"></b><span id="vDelay"></span></div>
+    <div class="vbody">
+      <p class="ex" id="vEx">Exemple fictif. Changez les réponses pour votre machine.</p>
+      <div><h3>À vérifier en premier</h3><ul id="vCauses"></ul></div>
+      <div><h3>Que faire</h3><ul id="vActs"></ul></div>
+      <div id="vParts"><h3>Pièces à prévoir</h3><p id="vPartsTxt"></p></div>
+      <div class="btns">
+        <a class="btn" id="wa" href="https://wa.me/" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>
+        <button type="button" class="btn ghost" id="copyRep">Copier le rapport</button>
+        <button type="button" class="btn ghost" id="save">Garder dans le carnet</button>
+      </div>
+      <p class="ex">Repères généraux. Les consignes de sécurité du site, le manuel du constructeur et l’avis d’un technicien passent avant ce résultat.</p>
+    </div>
+  </div>
+</div></div></section>
+
+<section class="s" id="carnet"><div class="wrap">
+  <div class="head"><h2>Carnet de la machine</h2><p class="lead">Les diagnostics gardés restent sur ce téléphone. Ils disparaissent si vous effacez les données du navigateur.</p></div>
+  <div class="log" id="log"></div>
+</div></section>
+
+<section class="s alt"><div class="wrap two">
+  <div><h2>Fait pour vous si</h2><ul>
+    <li>Vous avez quelques machines et peu de techniciens.</li>
+    <li>Vous n’avez ni capteurs ni logiciel de maintenance.</li>
+    <li>Une panne vous coûte cher parce que la pièce met du temps à arriver.</li>
+    <li>Vos équipes communiquent déjà par téléphone et WhatsApp.</li>
+  </ul></div>
+  <div><h2>Ce que l’outil ne fait pas</h2><ul>
+    <li>Il ne voit pas la machine : il part de ce que vous lui dites.</li>
+    <li>Il ne prédit pas de date de panne.</li>
+    <li>Il ne remplace ni un technicien ni un contrôle obligatoire.</li>
+    <li>Il ne se connecte pas à vos machines.</li>
+  </ul></div>
+</div></section>
+
+<section class="s" id="methode"><div class="wrap">
+  <div class="head"><h2>Comment le niveau est choisi</h2><p class="lead">Des règles simples et publiques. Le niveau retenu est le plus grave des signes cochés.</p></div>
+  <div class="tw"><table><thead><tr><th scope="col">Niveau</th><th scope="col">Signes</th><th scope="col">Délai conseillé</th></tr></thead><tbody id="rules"></tbody></table></div>
+  <p class="lead" style="margin-top:16px;font-size:16px">Plusieurs petits signes comptent aussi : une vibration avec un bruit ou une chauffe passe en Alerte, comme trois signes de surveillance réunis. Une vibration saisie est lue selon les zones de la norme ISO 10816, d’après la puissance.</p>
+</div></section>
+
+<section class="s alt" id="pilote"><div class="wrap">
+  <div class="head"><h2>Commencez sans payer</h2><p class="lead">Le diagnostic reste gratuit. Les abonnements sont prélevés chaque mois, sans engagement, et se résilient par e-mail. Après le paiement, envoyez la liste de vos machines à sahali.prof@gmail.com : le suivi démarre sous 2 jours ouvrés. Sur la page de paiement, Essentiel apparaît sous le nom « Prix diagnostic » et Pro sous le nom « DiagnosticIQ.2 ».</p></div>
+  <div class="plates">
+    <article class="plate hi"><h3>Pilote</h3><div class="price">0 €<small> 30 jours</small></div><p>Pour les premiers sites de Mayotte : 5 machines, suivies avec vous à distance par téléphone ou WhatsApp.</p><button type="button" class="btn ghost" data-ask="Pilote gratuit">Demander le pilote</button></article>
+    <article class="plate"><h3>Essentiel</h3><div class="price">45 €<small>/mois</small></div><p>Jusqu’à 10 machines. Envoyez vos rapports par WhatsApp ou e-mail : nous tenons l’historique de chaque machine et vous envoyons un récapitulatif chaque mois.</p><a class="btn" href="https://buy.stripe.com/bJe28tc5Kgko9gedgD2Ry07" target="_blank" rel="noopener">S’abonner à 45 € par mois</a></article>
+    <article class="plate"><h3>Pro</h3><div class="price">70 €<small>/mois</small></div><p>Jusqu’à 30 machines. Le même suivi, avec un récapitulatif mensuel classé par urgence.</p><a class="btn" href="https://buy.stripe.com/00weVf1r6ecgdwu7Wj2Ry09" target="_blank" rel="noopener">S’abonner à 70 € par mois</a></article>
+  </div>
+  <div class="two" style="margin-top:28px;align-items:center">
+    <div><h3>Diagnostiquer avant la panne</h3><p style="margin-top:6px;color:var(--muted)">Le guide de la maintenance conditionnelle en 4 chapitres, pour repérer les défauts avant l’arrêt de production. 29 €.</p></div>
+    <div><a class="btn" href="https://buy.stripe.com/7sY8wRedS9W0dwua4r2Ry04" target="_blank" rel="noopener">Acheter l’e-book</a></div>
+  </div>
+</div></section>
+
+<section class="s" id="questions"><div class="wrap">
+  <div class="head"><h2>Questions fréquentes</h2></div>
+  <details class="q"><summary>Faut-il acheter du matériel ?</summary><p>Non. Le diagnostic part de ce que vous voyez et entendez. Un vibromètre affine le résultat si vous en avez un.</p></details>
+  <details class="q"><summary>Où vont mes réponses ?</summary><p>Le calcul se fait sur votre téléphone. Rien n’est envoyé, sauf si vous partagez vous-même le rapport.</p></details>
+  <details class="q"><summary>Faut-il du réseau ?</summary><p>Il en faut pour ouvrir la page et pour envoyer le rapport.</p></details>
+  <details class="q"><summary>Et si la machine est dangereuse ?</summary><p>Suivez les consignes de sécurité du site. Ne touchez pas une machine en marche et ne restez pas près d’une fumée ou d’une fuite de carburant ou de gaz.</p></details>
+</div></section>
+
+<section class="s alt" id="contact"><div class="wrap two">
+  <div>
+    <h2>Parlons de vos machines</h2>
+    <p class="mail">sahali.prof@gmail.com</p>
+    <p style="margin-top:6px">SAHALI, Bourg-en-Bresse, France</p>
+  </div>
+  <div>
+    <label for="msg" style="display:block;font-weight:600;margin-bottom:6px">Votre message</label>
+    <textarea id="msg"></textarea>
+    <div class="btns" style="margin-top:10px">
+      <button type="button" class="btn" id="copyMsg">Copier le message</button>
+      <button type="button" class="btn ghost" id="copyMail">Copier l’adresse</button>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">© 2026 MaintenanceIQ. Éditeur : SAHALI, Bourg-en-Bresse.</div></footer>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var MACH=[
+{k:"genset",n:"Groupe électrogène",p:"filtres à huile, gasoil et air, courroie, batterie"},
+{k:"pump",n:"Pompe",p:"garniture mécanique, roulements, accouplement"},
+{k:"motor",n:"Moteur électrique",p:"roulements, ventilateur, contacteur"},
+{k:"comp",n:"Compresseur d’air",p:"filtres, huile, courroie, clapet"},
+{k:"cold",n:"Groupe froid",p:"contacteur, ventilateur du condenseur, à voir avec votre frigoriste"},
+{k:"fan",n:"Ventilateur",p:"courroie, roulements, paliers"},
+{k:"conv",n:"Convoyeur",p:"rouleaux, bande, paliers"},
+{k:"crush",n:"Broyeur ou mélangeur",p:"pièces d’usure, courroies, roulements"},
+{k:"gear",n:"Réducteur",p:"joints, huile, roulements"}];
+var SYM=[
+{k:"smoke",l:3,t:"Fumée, odeur de brûlé ou étincelles",c:"Échauffement électrique ou frottement important",a:"Arrêtez la machine si les consignes le permettent et éloignez les personnes."},
+{k:"fuel",l:3,t:"Fuite de carburant ou de gaz",c:"Durite, raccord ou joint défaillant",a:"Arrêtez, écartez toute source de chaleur et appliquez les consignes du site."},
+{k:"stop",l:2,t:"S’arrête seule ou ne démarre plus",c:"Alimentation, protection ou sécurité déclenchée",a:"Notez le message affiché et ne relancez pas plusieurs fois de suite."},
+{k:"trip",l:2,t:"Le disjoncteur ou la protection saute",c:"Surcharge, blocage mécanique ou défaut d’isolement",a:"Faites contrôler par une personne habilitée avant de réarmer."},
+{k:"knock",l:2,t:"Choc métallique répété",c:"Pièce desserrée, jeu mécanique ou roulement détruit",a:"Prévoyez l’arrêt et faites vérifier fixations et roulements."},
+{k:"shake",l:1,t:"Vibre plus que d’habitude",c:"Fixations desserrées, désalignement ou balourd",a:"À l’arrêt, contrôlez le serrage du socle et l’alignement."},
+{k:"noise",l:1,t:"Bruit nouveau",c:"Roulement fatigué ou graissage insuffisant",a:"Comparez avec le bruit habituel et vérifiez le graissage."},
+{k:"hot",l:1,t:"Chauffe plus que d’habitude (voyant ou thermomètre)",c:"Refroidissement encrassé, surcharge ou graissage",a:"Nettoyez les grilles et radiateurs à l’arrêt et contrôlez la charge."},
+{k:"leak",l:1,t:"Fuite d’huile ou d’eau",c:"Joint ou raccord à reprendre",a:"Repérez l’origine, surveillez le niveau et commandez le joint."},
+{k:"perf",l:1,t:"Moins de débit, de pression, de froid ou de puissance",c:"Filtre encrassé, usure ou fuite",a:"Commencez par les filtres et les vannes."},
+{k:"alarm",l:1,t:"Voyant ou alarme allumé",c:"Défaut signalé par la machine",a:"Notez le code et cherchez-le dans le manuel."},
+{k:"rust",l:1,t:"Corrosion visible",c:"Humidité ou air salin",a:"Inspectez bornes et fixations et protégez les parties exposées."},
+{k:"late",l:1,t:"Entretien en retard",c:"Entretien préventif dépassé",a:"Planifiez l’entretien prévu."}];
+var LV=[["Bon état","good","Entretien normal"],["Surveillance","watch","Contrôle sous 15 jours"],["Alerte","alert","Intervention sous 72 h"],["Critique","crit","Arrêt si possible et intervention immédiate"]];
+var LIM=[[.71,1.8,4.5],[1.12,2.8,7.1],[1.8,4.5,11.2]];
+function zone(kw,v){var l=LIM[kw<15?0:kw<=300?1:2];return v<=l[0]?0:v<=l[1]?1:v<=l[2]?2:3}
+
+function diagnose(s){
+ var on=SYM.filter(function(x){return s.sym[x.k]});
+ var lv=on.reduce(function(m,x){return Math.max(m,x.l)},0);
+ var c=on.map(function(x){return x.c}),a=on.map(function(x){return x.a});
+ var ones=on.filter(function(x){return x.l===1}).length;
+ if(ones>=3||(s.sym.shake&&(s.sym.noise||s.sym.hot))||(s.sym.hot&&s.sym.noise))lv=Math.max(lv,2);
+ if(s.kw>0&&s.vib>0){var z=zone(s.kw,s.vib);lv=Math.max(lv,z===3?3:z===2?2:z);
+  if(z>=2){c.push("Vibration trop élevée pour cette puissance");a.push("Faites contrôler alignement, équilibrage et roulements.")}}
+ if(s.salt&&on.length){c.push("Air salin : corrosion possible des bornes et des fixations")}
+ if(!c.length){c=["Aucun signe coché"];a=["Refaites ce contrôle à la prochaine ronde."]}
+ return{lv:lv,c:c,a:a};
+}
+window.__miq={diagnose:diagnose,SYM:SYM};
+
+var st={m:"genset",sym:{hot:true,late:true,noise:true},salt:true,kw:0,vib:0},example=true,last="";
+var key="miq-carnet";
+function loadLog(){try{return JSON.parse(localStorage.getItem(key))||[]}catch(e){return[]}}
+function saveLog(l){try{localStorage.setItem(key,JSON.stringify(l));return true}catch(e){return false}}
+
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function li(a){return a.map(function(t){return"<li>"+esc(t)+"</li>"}).join("")}
+function mach(){return MACH.filter(function(m){return m.k===st.m})[0]}
+function report(r){var m=mach(),nm=$("name").value.trim(),L=LV[r.lv];
+ var o=["Diagnostic MaintenanceIQ",m.n+(nm?" : "+nm:""),"",L[0]+" : "+L[2],"","À vérifier :"];
+ r.c.forEach(function(t){o.push("- "+t)});o.push("","Que faire :");r.a.forEach(function(t){o.push("- "+t)});
+ if(r.lv)o.push("","Pièces à prévoir : "+m.p);o.push("","Repères généraux : ce rapport ne remplace pas l’avis d’un technicien.");return o.join("\n")}
+function render(){
+ var r=diagnose(st),L=LV[r.lv],m=mach();
+ $("verdict").style.setProperty("--lv","var(--"+L[1]+")");
+ $("vLevel").textContent=L[0];$("vDelay").textContent=L[2];
+ $("vCauses").innerHTML=li(r.c);$("vActs").innerHTML=li(r.a);
+ $("vParts").hidden=!r.lv;$("vPartsTxt").textContent=m.p+". Vérifiez le stock et le délai dès maintenant.";
+ $("vEx").hidden=!example;
+ last=report(r);$("wa").href="https://wa.me/?text="+encodeURIComponent(last);
+ Array.prototype.forEach.call(document.querySelectorAll("#machines .chip"),function(b){b.setAttribute("aria-pressed",String(b.dataset.k===st.m))});
+}
+function renderLog(){var l=loadLog();
+ $("log").innerHTML=l.length?l.map(function(e){return"<div><b>"+esc(e.n)+"</b><span>"+esc(e.d)+", "+esc(e.l)+"</span></div>"}).join(""):"<p class=\"ex\">Aucun diagnostic gardé. Touchez « Garder dans le carnet » pour commencer le suivi d’une machine.</p>"}
+
+$("machines").innerHTML=MACH.map(function(m){return'<button type="button" class="chip" data-k="'+m.k+'">'+m.n+"</button>"}).join("");
+$("syms").innerHTML=SYM.map(function(s){return'<label class="sym" for="s-'+s.k+'"><input type="checkbox" id="s-'+s.k+'" data-s="'+s.k+'"'+(st.sym[s.k]?" checked":"")+"><span>"+s.t+"</span></label>"}).join("");
+$("salt").checked=st.salt;
+$("rules").innerHTML=[3,2,1].map(function(l){return'<tr><td><span class="dot" style="--c:var(--'+LV[l][1]+')"></span>'+LV[l][0]+"</td><td>"+SYM.filter(function(s){return s.l===l}).map(function(s){return s.t}).join(" ; ")+"</td><td>"+LV[l][2]+"</td></tr>"}).join("");
+$("machines").addEventListener("click",function(e){var b=e.target.closest(".chip");if(b){st.m=b.dataset.k;example=false;render()}});
+$("ctl").addEventListener("input",function(){example=false;
+ Array.prototype.forEach.call(document.querySelectorAll("[data-s]"),function(i){st.sym[i.dataset.s]=i.checked});
+ st.salt=$("salt").checked;st.kw=parseFloat($("m-kw").value)||0;st.vib=parseFloat($("m-vib").value)||0;render()});
+function copy(text,btn){var o=btn.textContent;function d(t){btn.textContent=t;setTimeout(function(){btn.textContent=o},2200)}
+ try{navigator.clipboard.writeText(text).then(function(){d("Copié")},function(){d("Copie impossible")})}catch(e){d("Copie impossible")}}
+$("copyRep").addEventListener("click",function(){copy(last,this)});
+$("copyMail").addEventListener("click",function(){copy("sahali.prof@gmail.com",this)});
+$("copyMsg").addEventListener("click",function(){copy($("msg").value,this)});
+$("save").addEventListener("click",function(){var r=diagnose(st),b=this,m=mach(),nm=$("name").value.trim();
+ var l=loadLog();l.unshift({n:nm||m.n,l:LV[r.lv][0],d:new Date().toLocaleDateString("fr-FR")});l=l.slice(0,30);
+ var ok=saveLog(l);renderLog();var o=b.textContent;b.textContent=ok?"Gardé":"Carnet indisponible ici";setTimeout(function(){b.textContent=o},2200)});
+var base="Bonjour,\n\nJe souhaite demander : {p}.\nEntreprise :\nMachines à suivre :\nTéléphone ou WhatsApp :\n\nMerci.";
+$("msg").value=base.replace("{p}","Pilote gratuit");
+Array.prototype.forEach.call(document.querySelectorAll("[data-ask]"),function(b){b.addEventListener("click",function(){$("msg").value=base.replace("{p}",b.dataset.ask);$("contact").scrollIntoView();$("msg").focus({preventScroll:true})})});
+render();renderLog();
+})();
+</script>
+
+</body></html>
