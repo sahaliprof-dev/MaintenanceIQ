@@ -1,0 +1,24 @@
+# MaintenanceIQ
+
+> Diagnostic de maintenance industrielle sur téléphone, en français, sans capteur ni logiciel à installer, pour les petits sites industriels d'outre-mer : Mayotte, La Réunion, Guadeloupe, Martinique et Guyane. Marque de SAHALI, entrepreneur individuel (Bourg-en-Bresse).
+
+L'outil gratuit donne un niveau d'urgence (bon état, surveillance, alerte, critique), un délai conseillé, quoi vérifier et les pièces à prévoir pour 9 types de machines : groupe électrogène, pompe, moteur électrique, compresseur d'air, groupe froid, ventilateur, convoyeur, broyeur ou mélangeur, réducteur. Il ne se connecte pas aux machines, ne prédit pas de date de panne et ne remplace pas un technicien.
+
+Offres : pilote gratuit de 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement. Guide PDF « Diagnostiquer avant la panne » : 37 pages, 29 €.
+
+Contact : sahali.prof@gmail.com · WhatsApp +33 6 98 71 18 48
+
+## Pages principales
+- [Diagnostic gratuit et offres](https://www.maintenanceiq.fr/): outil de diagnostic, méthode, prix, FAQ
+- [À propos](https://www.maintenanceiq.fr/a-propos/): qui est derrière MaintenanceIQ, la méthode
+- [Fiches terrain](https://www.maintenanceiq.fr/fiches/): défauts fréquents des machines, signes et actions
+
+## Territoires
+- [Mayotte](https://www.maintenanceiq.fr/mayotte/)
+- [La Réunion](https://www.maintenanceiq.fr/la-reunion/)
+- [Guadeloupe](https://www.maintenanceiq.fr/guadeloupe/)
+- [Martinique](https://www.maintenanceiq.fr/martinique/)
+- [Guyane](https://www.maintenanceiq.fr/guyane/)
+
+## Fiches terrain
+- [Cavitation d'une pompe centrifuge](https://www.maintenanceiq.fr/fiches/cavitation-pompe/): bruit de gravier, vibration, baisse de débit
