@@ -4,7 +4,7 @@
 
 L'outil gratuit donne un niveau d'urgence (bon état, surveillance, alerte, critique), un délai conseillé, quoi vérifier et les pièces à prévoir pour 9 types de machines : groupe électrogène, pompe, moteur électrique, compresseur d'air, groupe froid, ventilateur, convoyeur, broyeur ou mélangeur, réducteur. Il ne se connecte pas aux machines, ne prédit pas de date de panne et ne remplace pas un technicien.
 
-Offres : pilote gratuit de 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement. Guide PDF « Diagnostiquer avant la panne » : 37 pages, 29 €.
+Offres : pilote gratuit de 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement. Guide PDF « Diagnostiquer avant la panne » : 37 pages, 29 €. Extrait gratuit (chapitre 1) : https://www.maintenanceiq.fr/ebook/extrait-diagnostiquer-avant-la-panne.pdf
 
 Contact : sahali.prof@gmail.com · WhatsApp +33 6 98 71 18 48
 
