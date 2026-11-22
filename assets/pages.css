@@ -29,3 +29,6 @@ ol{padding-left:24px}li{margin-bottom:6px}
 h3{font:700 21px/1.2 var(--body);margin:22px 0 6px}
 .card input{width:100%;margin-top:4px;padding:10px;font:500 17px var(--body);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 .card label{font-weight:600;font-size:16px}
+.niv{display:inline-block;font:700 12px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;padding:4px 7px;border-radius:4px;margin-right:6px;vertical-align:middle}
+.n1{background:#79D49B;color:#14201D}.n2{background:#F2CC55;color:#14201D}.n3{background:#F39A4C;color:#14201D}
+.top span{display:flex;align-items:center}

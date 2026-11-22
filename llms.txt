@@ -1,47 +1,75 @@
 # MaintenanceIQ
 
-> Diagnostic de maintenance industrielle sur téléphone, en français, sans capteur ni logiciel à installer, pour les petits sites industriels d'outre-mer : Mayotte, La Réunion, Guadeloupe, Martinique et Guyane. Marque de SAHALI, entrepreneur individuel (Bourg-en-Bresse).
+> Practical maintenance for industrial sites and buildings, worldwide, in French and English: troubleshooting guides from simple to complex, maintenance methods, a downtime cost calculator, and a remote condition-based follow-up service (free 30-day pilot). Brand of SAHALI (sole trader, trade name Atelier Calibre, France).
 
-L'outil gratuit donne un niveau d'urgence (bon état, surveillance, alerte, critique), un délai conseillé, quoi vérifier et les pièces à prévoir pour 9 types de machines : groupe électrogène, pompe, moteur électrique, compresseur d'air, groupe froid, ventilateur, convoyeur, broyeur ou mélangeur, réducteur. Il ne se connecte pas aux machines, ne prédit pas de date de panne et ne remplace pas un technicien.
-
-Offres : pilote gratuit de 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement. Guide PDF « Diagnostiquer avant la panne » : 37 pages, 29 €. Extrait gratuit (chapitre 1) : https://www.maintenanceiq.fr/ebook/extrait-diagnostiquer-avant-la-panne.pdf
-
+Offres / Plans : pilote gratuit 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement, suivi à distance par WhatsApp ou e-mail dans tous les pays. Guide PDF « Diagnostiquer avant la panne » (37 pages, en français, 29 €) ; extrait gratuit : https://www.maintenanceiq.fr/ebook/extrait-diagnostiquer-avant-la-panne.pdf
+Ce que MaintenanceIQ ne fait pas : pas de capteurs, pas de connexion aux machines, pas de prédiction de date de panne, ne remplace pas un technicien sur place.
 Contact : sahali.prof@gmail.com · WhatsApp +33 6 98 71 18 48
 
-## Pages principales
-- [Diagnostic gratuit et offres](https://www.maintenanceiq.fr/): outil de diagnostic, méthode, prix, FAQ
-- [À propos](https://www.maintenanceiq.fr/a-propos/): qui est derrière MaintenanceIQ, la méthode
-- [Fiches terrain](https://www.maintenanceiq.fr/fiches/): défauts fréquents des machines, signes et actions
-
-## Territoires
-- [Mayotte](https://www.maintenanceiq.fr/mayotte/)
-- [La Réunion](https://www.maintenanceiq.fr/la-reunion/)
-- [Guadeloupe](https://www.maintenanceiq.fr/guadeloupe/)
-- [Martinique](https://www.maintenanceiq.fr/martinique/)
-- [Guyane](https://www.maintenanceiq.fr/guyane/)
-
-## Outils
+## Pages principales (FR)
+- [Accueil, diagnostic gratuit et offres](https://www.maintenanceiq.fr/)
+- [Fiches terrain](https://www.maintenanceiq.fr/fiches/)
+- [Méthodes de maintenance](https://www.maintenanceiq.fr/methodes/)
 - [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)
-- [Glossaire de la maintenance industrielle](https://www.maintenanceiq.fr/glossaire/)
+- [Glossaire](https://www.maintenanceiq.fr/glossaire/)
+- [À propos](https://www.maintenanceiq.fr/a-propos/)
 
-## Outils
-- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)
-- [Glossaire de la maintenance industrielle](https://www.maintenanceiq.fr/glossaire/)
+## English
+- [Home and plans](https://www.maintenanceiq.fr/en/)
+- [Troubleshooting guides](https://www.maintenanceiq.fr/en/guides/)
+- [Maintenance methods](https://www.maintenanceiq.fr/en/methods/)
+- [Downtime cost calculator](https://www.maintenanceiq.fr/en/downtime-cost-calculator/)
+- [About](https://www.maintenanceiq.fr/en/about/)
 
-## Outils
-- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)
-- [Glossaire de la maintenance industrielle](https://www.maintenanceiq.fr/glossaire/)
-
-## Fiches terrain
+## Fiches terrain (FR)
 - [Pompe qui fait un bruit de gravier : la cavitation](https://www.maintenanceiq.fr/fiches/cavitation-pompe/): Bruit de gravier, vibration, baisse de débit : comment reconnaître la cavitation d’une pompe centrifuge, quoi vérifier et que faire avant la casse.
 - [Fuite à la garniture mécanique d’une pompe](https://www.maintenanceiq.fr/fiches/pompe-garniture-mecanique-fuit/): Une garniture mécanique ne doit pas goutter en continu. Causes d’une fuite (marche à sec, usure, particules), vérifications et actions pour éviter l’arrêt.
 - [Roulement qui siffle ou gronde : diagnostic](https://www.maintenanceiq.fr/fiches/roulement-qui-siffle-ou-gronde/): Sifflement, grondement, claquement, chauffe : ce que le bruit d’un roulement indique, comment le vérifier au stéthoscope et quand le remplacer.
 - [Moteur électrique qui chauffe : causes et solutions](https://www.maintenanceiq.fr/fiches/moteur-electrique-qui-chauffe/): Carcasse plus chaude que d’habitude, odeur de vernis : les causes d’un moteur électrique qui chauffe (ailettes, surcharge, tension, phases) et quoi faire.
 - [Moteur électrique qui disjoncte : causes](https://www.maintenanceiq.fr/fiches/moteur-qui-disjoncte/): Un moteur qui fait sauter sa protection : isolement affaibli par l’humidité, surcharge, perte de phase ou relais mal réglé. Les vérifications dans le bon ordre.
-- [Groupe électrogène qui ne démarre pas : que vérifier](https://www.maintenanceiq.fr/fiches/groupe-electrogene-ne-demarre-pas/): Batterie, gasoil, refroidissement, marche à vide, inverseur de source : les points faibles d’un groupe électrogène et l’essai mensuel qui évite la mauvaise surprise.
+- [Groupe électrogène qui ne démarre pas : que vérifier](https://www.maintenanceiq.fr/fiches/groupe-electrogene-ne-demarre-pas/): Batterie, gasoil, refroidissement, marche à vide, inverseur : les points faibles d’un groupe électrogène et l’essai mensuel qui évite la mauvaise surprise.
 - [Compresseur qui tourne sans arrêt : les fuites d’air](https://www.maintenanceiq.fr/fiches/compresseur-tourne-sans-arret/): Un compresseur d’air qui tourne atelier à l’arrêt paie des fuites. Comment les trouver le soir, et les autres causes : purges, refroidisseur, filtre.
 - [Chambre froide qui ne refroidit plus assez](https://www.maintenanceiq.fr/fiches/chambre-froide-temperature-remonte/): Température qui remonte, compresseur qui tourne sans arrêt, givre, coupures haute pression : causes et premiers contrôles sur un groupe froid en climat chaud.
 - [Courroie qui siffle ou patine : causes et réglage](https://www.maintenanceiq.fr/fiches/courroie-qui-siffle-ou-patine/): Sifflement au démarrage, poussière noire, usure d’un flanc : comment diagnostiquer une courroie qui patine, vérifier la tension et l’alignement des poulies.
 - [Huile de réducteur laiteuse, noire ou chargée](https://www.maintenanceiq.fr/fiches/huile-reducteur-laiteuse/): Huile laiteuse, foncée, particules brillantes : lire l’huile d’un réducteur pour voir l’intérieur sans ouvrir. Le test de la tache, gratuit, et les actions.
 - [Armoire électrique : connexion qui chauffe](https://www.maintenanceiq.fr/fiches/armoire-electrique-connexion-qui-chauffe/): La plupart des incendies d’origine électrique commencent par une connexion qui chauffe. Signes extérieurs, mesures par personne habilitée et seuils d’écart.
 - [Ventilateur ou extracteur qui vibre : causes](https://www.maintenanceiq.fr/fiches/ventilateur-qui-vibre/): Vibration en hausse, bruit de frottement, débit en baisse : pourquoi un ventilateur vibre (balourd des pales encrassées) et les contrôles à faire en air salin.
+- [Climatisation qui ne refroidit plus : que vérifier](https://www.maintenanceiq.fr/fiches/climatisation-ne-refroidit-plus/): La clim souffle mais ne refroidit plus ? Filtres, unité extérieure, réglages, fluide : les vérifications simples, puis quand appeler un frigoriste.
+- [Climatisation qui coule de l’eau : causes](https://www.maintenanceiq.fr/fiches/climatisation-qui-coule/): De l’eau goutte de l’unité intérieure ? Évacuation des condensats bouchée, pompe de relevage, filtres sales qui font givrer : causes et solutions.
+- [Disjoncteur différentiel qui saute : méthode](https://www.maintenanceiq.fr/fiches/differentiel-qui-saute/): Un différentiel qui saute signale une fuite de courant. La méthode pour isoler le circuit ou l’appareil en défaut, et ce qui relève d’un électricien.
+- [Surpresseur qui démarre sans arrêt (court-cycle)](https://www.maintenanceiq.fr/fiches/surpresseur-demarre-sans-arret/): Une pompe de surpression qui s’enclenche toutes les quelques secondes : réservoir à vessie dégonflé, fuite, clapet, pressostat. Diagnostic et solutions.
+- [Lire un spectre vibratoire : les défauts types](https://www.maintenanceiq.fr/fiches/lire-un-spectre-vibratoire/): Balourd à 1×, désalignement à 1× et 2× en axial, jeu mécanique, défauts de roulement : comment reconnaître les défauts courants sur un spectre FFT.
+- [Moteur à variateur : courants de palier](https://www.maintenanceiq.fr/fiches/courants-de-palier-variateur/): Roulements qui cassent à répétition sur un moteur à variateur : électroérosion, cannelures. Signes, causes et solutions (blindage, masse, roulement isolé).
+- [Huile hydraulique qui chauffe : causes et solutions](https://www.maintenanceiq.fr/fiches/hydraulique-huile-qui-chauffe/): Une centrale hydraulique trop chaude perd son huile et ses joints. Échangeur, niveau, limiteur qui débite, pompe usée, filtre : diagnostic méthodique.
+
+## Méthodes (FR)
+- [Types de maintenance : corrective, préventive…](https://www.maintenanceiq.fr/methodes/types-de-maintenance/): Corrective, préventive systématique, conditionnelle, prévisionnelle : définitions, avantages, limites et comment les combiner sur un petit site.
+- [Courbe P-F et intervalle P-F expliqués](https://www.maintenanceiq.fr/methodes/courbe-p-f/): Le point P (défaut détectable), le point F (panne) et l’intervalle P-F : comment cette courbe fixe la fréquence de vos contrôles.
+- [Criticité des machines : la grille A, B, C](https://www.maintenanceiq.fr/methodes/criticite-des-machines/): Une grille simple sur quatre critères pour classer vos machines en A, B ou C, et décider de la fréquence des contrôles. Exemple chiffré inclus.
+- [MTBF, MTTR et disponibilité : formules et exemples](https://www.maintenanceiq.fr/methodes/mtbf-mttr-disponibilite/): Définitions et formules du MTBF, du MTTR et de la disponibilité, avec un exemple chiffré et les leviers concrets pour améliorer chacun.
+- [AMDEC (FMEA) : méthode pas à pas](https://www.maintenanceiq.fr/methodes/amdec/): L’AMDEC appliquée à une machine : modes de défaillance, effets, causes, gravité × fréquence × détection, plan d’actions. Méthode et exemple.
+- [Causes racines : méthode des 5 pourquoi](https://www.maintenanceiq.fr/methodes/analyse-des-causes-racines/): Pourquoi la même panne revient : trouver la cause racine avec les 5 pourquoi et le diagramme d’Ishikawa (5M). Méthode et exemple concret.
+- [Plan de maintenance préventive : 6 étapes](https://www.maintenanceiq.fr/methodes/plan-de-maintenance-preventive/): Inventaire, criticité, recommandations constructeur, gammes, fréquences, suivi : construire un plan de maintenance préventive simple et tenable.
+- [TPM et TRS : principes et calcul](https://www.maintenanceiq.fr/methodes/tpm-et-trs/): La TPM (maintenance productive totale), la maintenance autonome des opérateurs et le calcul du TRS (disponibilité × performance × qualité), avec exemple.
+- [Gestion des pièces de rechange : méthode](https://www.maintenanceiq.fr/methodes/gestion-des-pieces-de-rechange/): Quelles pièces garder en stock, comment calculer le point de commande et le stock de sécurité, surtout sur un site éloigné des fournisseurs.
+
+## Guides (EN)
+- [Pump making a gravel noise: cavitation](https://www.maintenanceiq.fr/en/guides/pump-cavitation/): Gravel noise, vibration, falling flow: how to recognise cavitation in a centrifugal pump, what to check and what to do before it breaks.
+- [Noisy bearing: whistling, rumbling, knocking](https://www.maintenanceiq.fr/en/guides/noisy-bearing/): Whistling, rumbling, knocking, heat: what a bearing noise means, how to check it with a stethoscope and when to replace it.
+- [Electric motor overheating: causes and fixes](https://www.maintenanceiq.fr/en/guides/electric-motor-overheating/): Frame hotter than usual, smell of hot varnish: the causes of an overheating electric motor (fins, overload, voltage, phases) and what to do.
+- [Generator set won’t start: what to check](https://www.maintenanceiq.fr/en/guides/generator-will-not-start/): Battery, diesel, cooling, light-load running, transfer switch: the weak points of a standby generator and the monthly test that prevents surprises.
+- [Compressor runs constantly: compressed air leaks](https://www.maintenanceiq.fr/en/guides/compressor-runs-constantly/): A compressor that runs when nobody uses air is paying for leaks. How to find them in the evening, and other causes: drains, cooler, filter.
+- [Air conditioner not cooling: what to check](https://www.maintenanceiq.fr/en/guides/air-conditioner-not-cooling/): The AC blows but no longer cools? Filters, outdoor unit, settings, refrigerant: simple checks first, then when to call a certified technician.
+- [Reading a vibration spectrum: typical faults](https://www.maintenanceiq.fr/en/guides/reading-a-vibration-spectrum/): Unbalance at 1×, misalignment at 1× and 2× axial, looseness, bearing defects: how to recognise common faults on an FFT spectrum.
+- [Types of maintenance explained](https://www.maintenanceiq.fr/en/methods/types-of-maintenance/): Corrective, time-based preventive, condition-based and predictive maintenance: definitions, pros, limits and how to combine them on a small site.
+- [The P-F curve and P-F interval explained](https://www.maintenanceiq.fr/en/methods/p-f-curve/): Point P (detectable defect), point F (failure) and the P-F interval: how this curve sets the frequency of your inspections.
+- [Machine criticality: the A, B, C grid](https://www.maintenanceiq.fr/en/methods/machine-criticality/): A simple four-criteria grid to rank your machines A, B or C and decide how often to inspect them. Worked example included.
+- [MTBF, MTTR and availability: formulas](https://www.maintenanceiq.fr/en/methods/mtbf-mttr-availability/): Definitions and formulas for MTBF, MTTR and availability, with a worked example and practical levers to improve each one.
+- [Root cause analysis: the 5 Whys method](https://www.maintenanceiq.fr/en/methods/root-cause-analysis/): Why the same failure keeps coming back: find the root cause with the 5 Whys and the Ishikawa (fishbone) diagram. Method and real example.
+
+## Territoires d'outre-mer (FR)
+- [Mayotte](https://www.maintenanceiq.fr/mayotte/)
+- [La Réunion](https://www.maintenanceiq.fr/la-reunion/)
+- [Guadeloupe](https://www.maintenanceiq.fr/guadeloupe/)
+- [Martinique](https://www.maintenanceiq.fr/martinique/)
+- [Guyane](https://www.maintenanceiq.fr/guyane/)

@@ -64,7 +64,7 @@ dict(
  slug="groupe-electrogene-ne-demarre-pas", machine="Groupe électrogène", date="2026-11-22",
  h1="Groupe électrogène qui ne démarre pas : la batterie d’abord",
  title="Groupe électrogène qui ne démarre pas : que vérifier",
- desc="Batterie, gasoil, refroidissement, marche à vide, inverseur de source : les points faibles d’un groupe électrogène et l’essai mensuel qui évite la mauvaise surprise.",
+ desc="Batterie, gasoil, refroidissement, marche à vide, inverseur : les points faibles d’un groupe électrogène et l’essai mensuel qui évite la mauvaise surprise.",
  intro="Là où le réseau électrique est fragile, comme dans beaucoup de territoires d’outre-mer, le groupe électrogène protège toute l’activité. Son défaut majeur : il ne travaille presque jamais, et une machine qui ne tourne pas cache ses défauts jusqu’au jour où l’on en a besoin. La cause la plus fréquente de non-démarrage est la batterie.",
  signes=["Le démarreur tourne lentement ou ne tourne pas.","Le moteur démarre puis cale.","Fumée noire ou blanche persistante.","L’inverseur ne bascule pas lors d’une coupure."],
  causes=[("Batterie déchargée ou bornes oxydées","Tension au repos : environ 12,6 V pour une batterie 12 V chargée ; en dessous de 12,4 V, à recharger"),("Eau et micro-organismes dans le gasoil, filtres colmatés","Purge du décanteur et du fond de cuve"),("Refroidissement : niveau bas, radiateur encrassé","Niveau et état du liquide, propreté du radiateur, durites"),("Encrassement par la marche à vide","Historique des essais : à vide ou en charge ?"),("Inverseur de source défaillant","Essai réel de bascule, pas seulement du démarrage")],
