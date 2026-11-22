@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><script>(function(l){if(l.hostname!=="localhost"&&(l.protocol==="http:"||l.hostname==="maintenanceiq.fr"))l.replace("https://www.maintenanceiq.fr"+l.pathname+l.search+l.hash)})(location)</script><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculateur du coût d’une panne machine — MaintenanceIQ</title>
+<meta name="description" content="Calculez gratuitement le coût réel d’une panne : production perdue, main-d’œuvre, pièces en urgence, coûts induits. Pour les sites industriels d’outre-mer.">
+<link rel="canonical" href="https://www.maintenanceiq.fr/calculateur-cout-panne/">
+<meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:site_name" content="MaintenanceIQ">
+<meta property="og:title" content="Calculateur du coût d’une panne machine — MaintenanceIQ"><meta property="og:description" content="Calculez gratuitement le coût réel d’une panne : production perdue, main-d’œuvre, pièces en urgence, coûts induits. Pour les sites industriels d’outre-mer."><meta property="og:url" content="https://www.maintenanceiq.fr/calculateur-cout-panne/">
+<meta property="og:image" content="https://www.maintenanceiq.fr/og-image.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.png" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/fonts.css"><link rel="stylesheet" href="/assets/pages.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://www.maintenanceiq.fr/#org", "name": "MaintenanceIQ", "url": "https://www.maintenanceiq.fr/"}, {"@type": "WebApplication", "name": "Calculateur du coût d’une panne", "url": "https://www.maintenanceiq.fr/calculateur-cout-panne/", "applicationCategory": "BusinessApplication", "operatingSystem": "Tous navigateurs", "inLanguage": "fr", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "provider": {"@id": "https://www.maintenanceiq.fr/#org"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.maintenanceiq.fr/"}, {"@type": "ListItem", "position": 2, "name": "Coût d’une panne", "item": "https://www.maintenanceiq.fr/calculateur-cout-panne/"}]}]}</script>
+</head><body>
+<header class="top"><div class="wrap"><a href="/">MaintenanceIQ</a><a class="back" href="/#demande-pilote">Pilote gratuit</a></div></header>
+<main><div class="wrap">
+<p class="muted"><a href="/">Accueil</a> › Coût d’une panne</p>
+<h1>Calculez le vrai coût d’une panne</h1>
+<p>Une direction ne finance pas « de la maintenance » : elle finance des pertes évitées. Entrez vos propres chiffres pour estimer ce que coûte une panne non anticipée sur votre site. Le calcul se fait sur votre téléphone : rien n’est envoyé.</p>
+<form id="calc" class="card" onsubmit="return false" style="display:grid;gap:12px">
+<label>Heures d’arrêt de production<br><input id="h" type="number" inputmode="decimal" min="0" step="any" value="72"></label>
+<label>Marge perdue par heure d’arrêt (€)<br><input id="m" type="number" inputmode="decimal" min="0" step="any" value="125"></label>
+<label>Heures de main-d’œuvre (attente et réparation)<br><input id="mo" type="number" inputmode="decimal" min="0" step="any" value="20"></label>
+<label>Coût horaire de la main-d’œuvre (€)<br><input id="t" type="number" inputmode="decimal" min="0" step="any" value="35"></label>
+<label>Pièces au prix d’urgence et transport express (€)<br><input id="p" type="number" inputmode="decimal" min="0" step="any" value="1800"></label>
+<label>Coûts induits : produits perdus, pénalités, heures supplémentaires, location (€)<br><input id="c" type="number" inputmode="decimal" min="0" step="any" value="1200"></label>
+<p style="margin:0;font-size:20px">Coût estimé de la panne : <strong id="tot">–</strong></p>
+<p class="muted" id="det" style="margin:0"></p>
+</form>
+<p>Valeurs de départ : hypothèses d’illustration. Remplacez-les par les vôtres.</p>
+<h2>La formule</h2>
+<p><strong>Coût d’une panne</strong> = production perdue (heures d’arrêt × marge perdue par heure) + main-d’œuvre (attente, réparation, heures supplémentaires) + pièces (prix d’urgence, transport express) + coûts induits (produits perdus, pénalités de retard, clients perdus, location de matériel de secours).</p>
+<h2>Pourquoi c’est plus cher en outre-mer</h2>
+<p>À Mayotte, à La Réunion, aux Antilles ou en Guyane, la pièce qui manque arrive souvent par avion ou par bateau. Chaque jour d’attente ajoute des heures d’arrêt. La même défaillance repérée quelques semaines plus tôt (bruit, chauffe, vibration) permet de commander la pièce par voie normale et de la changer pendant un arrêt déjà prévu.</p>
+<h2>Exemple</h2>
+<p>Dans l’exemple du guide « Diagnostiquer avant la panne », la panne non anticipée d’une pompe de reprise dans une petite unité d’embouteillage (3 jours d’arrêt, pièces par avion) est estimée à 12 700 €, contre 285 € pour la même défaillance repérée six semaines plus tôt. Ces chiffres sont des hypothèses d’illustration, pas un résultat client.</p>
+<div class="card"><strong>Réduire ce coût</strong><br>Commencez par le <a href="/#diagnostic">diagnostic gratuit</a>, lisez les <a href="/fiches/">fiches terrain</a>, ou demandez le <a href="/#demande-pilote">pilote gratuit de 30 jours</a>.<br>
+<a class="btn" href="https://wa.me/33698711848" target="_blank" rel="noopener">Parler de vos machines sur WhatsApp</a></div>
+<script>(function(){var $=function(i){return document.getElementById(i)};var f=new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+function v(i){var x=parseFloat($(i).value);return isFinite(x)&&x>0?x:0}
+function r(){var prod=v("h")*v("m"),mo=v("mo")*v("t"),p=v("p"),c=v("c");$("tot").textContent=f.format(prod+mo+p+c);
+$("det").textContent="Production perdue "+f.format(prod)+" · main-d’œuvre "+f.format(mo)+" · pièces "+f.format(p)+" · coûts induits "+f.format(c)}
+$("calc").addEventListener("input",r);r()})()</script>
+</div></main>
+<footer><div class="wrap">© 2026 MaintenanceIQ — SAHALI, Bourg-en-Bresse.
+<nav><a href="/">Diagnostic gratuit</a><a href="/fiches/">Fiches terrain</a><a href="/calculateur-cout-panne/">Coût d’une panne</a><a href="/glossaire/">Glossaire</a><a href="/a-propos/">À propos</a><a href="/mentions-legales/">Mentions légales</a><a href="/cgv/">Conditions de vente</a><a href="/confidentialite/">Confidentialité</a><a href="mailto:sahali.prof@gmail.com">Contact</a></nav><nav><a href="/mayotte/">Mayotte</a><a href="/la-reunion/">La Réunion</a><a href="/guadeloupe/">Guadeloupe</a><a href="/martinique/">Martinique</a><a href="/guyane/">Guyane</a></nav></div></footer>
+</body></html>

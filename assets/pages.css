@@ -21,3 +21,11 @@ ul{padding-left:22px}
 footer{border-top:1px solid var(--line);padding-block:20px;color:var(--muted);font-size:15px}
 footer a{color:var(--muted)}
 footer nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px}
+.tw{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{text-align:left;vertical-align:top;padding:9px 10px 9px 0;border-top:1px solid var(--line)}
+th{color:var(--muted);font-weight:600}
+ol{padding-left:24px}li{margin-bottom:6px}
+h3{font:700 21px/1.2 var(--body);margin:22px 0 6px}
+.card input{width:100%;margin-top:4px;padding:10px;font:500 17px var(--body);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.card label{font-weight:600;font-size:16px}

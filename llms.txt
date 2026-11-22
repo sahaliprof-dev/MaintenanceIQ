@@ -20,5 +20,28 @@ Contact : sahali.prof@gmail.com · WhatsApp +33 6 98 71 18 48
 - [Martinique](https://www.maintenanceiq.fr/martinique/)
 - [Guyane](https://www.maintenanceiq.fr/guyane/)
 
+## Outils
+- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)
+- [Glossaire de la maintenance industrielle](https://www.maintenanceiq.fr/glossaire/)
+
+## Outils
+- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)
+- [Glossaire de la maintenance industrielle](https://www.maintenanceiq.fr/glossaire/)
+
+## Outils
+- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)
+- [Glossaire de la maintenance industrielle](https://www.maintenanceiq.fr/glossaire/)
+
 ## Fiches terrain
-- [Cavitation d'une pompe centrifuge](https://www.maintenanceiq.fr/fiches/cavitation-pompe/): bruit de gravier, vibration, baisse de débit
+- [Pompe qui fait un bruit de gravier : la cavitation](https://www.maintenanceiq.fr/fiches/cavitation-pompe/): Bruit de gravier, vibration, baisse de débit : comment reconnaître la cavitation d’une pompe centrifuge, quoi vérifier et que faire avant la casse.
+- [Fuite à la garniture mécanique d’une pompe](https://www.maintenanceiq.fr/fiches/pompe-garniture-mecanique-fuit/): Une garniture mécanique ne doit pas goutter en continu. Causes d’une fuite (marche à sec, usure, particules), vérifications et actions pour éviter l’arrêt.
+- [Roulement qui siffle ou gronde : diagnostic](https://www.maintenanceiq.fr/fiches/roulement-qui-siffle-ou-gronde/): Sifflement, grondement, claquement, chauffe : ce que le bruit d’un roulement indique, comment le vérifier au stéthoscope et quand le remplacer.
+- [Moteur électrique qui chauffe : causes et solutions](https://www.maintenanceiq.fr/fiches/moteur-electrique-qui-chauffe/): Carcasse plus chaude que d’habitude, odeur de vernis : les causes d’un moteur électrique qui chauffe (ailettes, surcharge, tension, phases) et quoi faire.
+- [Moteur électrique qui disjoncte : causes](https://www.maintenanceiq.fr/fiches/moteur-qui-disjoncte/): Un moteur qui fait sauter sa protection : isolement affaibli par l’humidité, surcharge, perte de phase ou relais mal réglé. Les vérifications dans le bon ordre.
+- [Groupe électrogène qui ne démarre pas : que vérifier](https://www.maintenanceiq.fr/fiches/groupe-electrogene-ne-demarre-pas/): Batterie, gasoil, refroidissement, marche à vide, inverseur de source : les points faibles d’un groupe électrogène et l’essai mensuel qui évite la mauvaise surprise.
+- [Compresseur qui tourne sans arrêt : les fuites d’air](https://www.maintenanceiq.fr/fiches/compresseur-tourne-sans-arret/): Un compresseur d’air qui tourne atelier à l’arrêt paie des fuites. Comment les trouver le soir, et les autres causes : purges, refroidisseur, filtre.
+- [Chambre froide qui ne refroidit plus assez](https://www.maintenanceiq.fr/fiches/chambre-froide-temperature-remonte/): Température qui remonte, compresseur qui tourne sans arrêt, givre, coupures haute pression : causes et premiers contrôles sur un groupe froid en climat chaud.
+- [Courroie qui siffle ou patine : causes et réglage](https://www.maintenanceiq.fr/fiches/courroie-qui-siffle-ou-patine/): Sifflement au démarrage, poussière noire, usure d’un flanc : comment diagnostiquer une courroie qui patine, vérifier la tension et l’alignement des poulies.
+- [Huile de réducteur laiteuse, noire ou chargée](https://www.maintenanceiq.fr/fiches/huile-reducteur-laiteuse/): Huile laiteuse, foncée, particules brillantes : lire l’huile d’un réducteur pour voir l’intérieur sans ouvrir. Le test de la tache, gratuit, et les actions.
+- [Armoire électrique : connexion qui chauffe](https://www.maintenanceiq.fr/fiches/armoire-electrique-connexion-qui-chauffe/): La plupart des incendies d’origine électrique commencent par une connexion qui chauffe. Signes extérieurs, mesures par personne habilitée et seuils d’écart.
+- [Ventilateur ou extracteur qui vibre : causes](https://www.maintenanceiq.fr/fiches/ventilateur-qui-vibre/): Vibration en hausse, bruit de frottement, débit en baisse : pourquoi un ventilateur vibre (balourd des pales encrassées) et les contrôles à faire en air salin.

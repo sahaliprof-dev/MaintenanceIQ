@@ -1,4 +1,5 @@
 User-agent: *
 Disallow: /merci/
 Disallow: /media/
+Disallow: /outils/
 Sitemap: https://www.maintenanceiq.fr/sitemap.xml
