@@ -8,6 +8,9 @@ FICHES_BY_SLUG.update({f["slug"]: f for f in FICHES})
 ROOT = sys.argv[1]
 SITE = "https://www.maintenanceiq.fr"
 WA = "https://wa.me/33698711848"
+NEWSLETTER = "https://f91f7b52.sibforms.com/serve/MUIFAE3mTHOHHnIqAx6XriVNf0kF2q94i1T1sqUD_fUxcWgm9xXpYHQdRz3DVkORU_Trk67I03HwSelgxsTai8I6QkUo0lNF5dvb2g8qNoxJ0LvPhV72kSb2pihQ2ooRTTA8CjpW8GoL322ZxPbguX6AelR780rlV9cmqvEyWNshj5CgfdPo_Gem0q8SmJ332ewyCTsXBWsARAnFAQ=="  # formulaire Brevo (liste « Votre première liste »)
+NL_CARD = ('<div class="card nl"><strong>Recevez 1 fiche de dépannage par semaine</strong><br>Une panne réelle expliquée simplement, gratuitement, dans votre boîte mail. Désinscription en 1 clic.<br>'
+           f'<a class="btn" href="{NEWSLETTER}" target="_blank" rel="noopener">Je m’inscris gratuitement</a></div>')
 TODAY = "2026-11-22"
 # Ne pas supprimer : code Google AdSense (compte ca-pub-6829528595387726)
 ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6829528595387726" crossorigin="anonymous"></script>\n'
@@ -48,6 +51,8 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
         foot = FOOT
         loc = "fr_FR"
         switch = f'<a class="back" href="{alt}" hreflang="en" style="margin-left:14px">EN</a>' if alt else '<a class="back" href="/en/" hreflang="en" style="margin-left:14px">EN</a>'
+    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/")):
+        body += NL_CARD
     if og_type == "article":
         q = urllib.parse.quote(url, safe="")
         qt = urllib.parse.quote(title + " " + url)
