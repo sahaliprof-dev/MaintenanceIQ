@@ -9,6 +9,8 @@ ROOT = sys.argv[1]
 SITE = "https://www.maintenanceiq.fr"
 WA = "https://wa.me/33698711848"
 TODAY = "2026-11-22"
+# Ne pas supprimer : code Google AdSense (compte ca-pub-6829528595387726)
+ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6829528595387726" crossorigin="anonymous"></script>\n'
 
 FOOT = ('<footer><div class="wrap">© 2026 MaintenanceIQ — SAHALI, Bourg-en-Bresse.\n'
         '<nav><a href="/">Diagnostic gratuit</a><a href="/fiches/">Fiches terrain</a><a href="/methodes/">Méthodes</a><a href="/calculateur-cout-panne/">Coût d’une panne</a><a href="/glossaire/">Glossaire</a><a href="/a-propos/">À propos</a>'
@@ -46,6 +48,16 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
         foot = FOOT
         loc = "fr_FR"
         switch = f'<a class="back" href="{alt}" hreflang="en" style="margin-left:14px">EN</a>' if alt else '<a class="back" href="/en/" hreflang="en" style="margin-left:14px">EN</a>'
+    if og_type == "article":
+        q = urllib.parse.quote(url, safe="")
+        qt = urllib.parse.quote(title + " " + url)
+        lab = ("Share this guide", "Copy link", "Link copied") if lang == "en" else ("Partager cette fiche", "Copier le lien", "Lien copié")
+        body += (f'<div class="card share"><strong>{lab[0]}</strong><br>'
+                 f'<a href="https://wa.me/?text={qt}" target="_blank" rel="noopener">WhatsApp</a> · '
+                 f'<a href="https://www.linkedin.com/sharing/share-offsite/?url={q}" target="_blank" rel="noopener">LinkedIn</a> · '
+                 f'<a href="https://www.facebook.com/sharer/sharer.php?u={q}" target="_blank" rel="noopener">Facebook</a> · '
+                 f'<a href="mailto:?subject={urllib.parse.quote(title)}&amp;body={q}">E-mail</a> · '
+                 f'<a href="#" onclick="navigator.clipboard&&navigator.clipboard.writeText(\'{url}\');this.textContent=\'{lab[2]}\';return false">{lab[1]}</a></div>')
     ldjson = json.dumps({"@context": "https://schema.org", "@graph": ld}, ensure_ascii=False)
     html = f'''<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><script>(function(l){{if(l.hostname!=="localhost"&&(l.protocol==="http:"||l.hostname==="maintenanceiq.fr"))l.replace("https://www.maintenanceiq.fr"+l.pathname+l.search+l.hash)}})(location)</script><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -58,7 +70,8 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.png" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/fonts.css"><link rel="stylesheet" href="/assets/pages.css">
 <script type="application/ld+json">{ldjson}</script>
-</head><body>
+<link rel="alternate" type="application/rss+xml" title="MaintenanceIQ" href="{'/en/feed.xml' if lang=='en' else '/feed.xml'}">
+{ADSENSE}</head><body>
 <header class="top"><div class="wrap"><a href="{'/en/' if lang=='en' else '/'}">MaintenanceIQ</a><span>{head_link}{switch}</span></div></header>
 <main><div class="wrap">
 {body}
@@ -558,6 +571,23 @@ page("/en/", "MaintenanceIQ — machine troubleshooting and maintenance",
         {"@type": "Offer", "name": "Pro", "price": "70", "priceCurrency": "EUR"},
         {"@type": "Offer", "name": "Enterprise", "price": "120", "priceCurrency": "EUR"}]}}],
      lang="en", alt="/")
+
+# ---------- Flux RSS (FR et EN) ----------
+from email.utils import format_datetime
+import datetime, html as _h
+def rss(path, title, desc, lang, items):
+    def d(x): return format_datetime(datetime.datetime.fromisoformat(x).replace(tzinfo=datetime.timezone.utc))
+    items = sorted(items, key=lambda i: i[3], reverse=True)
+    x = ('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>'
+         f'<title>{_h.escape(title)}</title><link>{SITE}{"/en/" if lang=="en" else "/"}</link><description>{_h.escape(desc)}</description><language>{lang}</language>'
+         + "".join(f'<item><title>{_h.escape(t)}</title><link>{SITE}{u}</link><guid>{SITE}{u}</guid><description>{_h.escape(ds)}</description><pubDate>{d(dt)}</pubDate></item>' for t, u, ds, dt in items)
+         + "</channel></rss>\n")
+    os.makedirs(os.path.join(ROOT, os.path.dirname(path.strip("/"))) or ROOT, exist_ok=True)
+    open(os.path.join(ROOT, path.strip("/")), "w").write(x)
+rss("/feed.xml", "MaintenanceIQ — fiches terrain et méthodes", "Dépannage et méthodes de maintenance, du simple au complexe.", "fr",
+    [(f["h1"], f"/fiches/{f['slug']}/", f["desc"], f["date"]) for f in FICHES] + [(m["h1"], f"/methodes/{m['slug']}/", m["desc"], m.get("date", "2026-11-22")) for m in METHODES])
+rss("/en/feed.xml", "MaintenanceIQ — troubleshooting guides and methods", "Practical maintenance troubleshooting and methods.", "en",
+    [(g["h1"], f"/en/guides/{g['slug']}/", g["desc"], g.get("date", FICHES_BY_SLUG.get(g["fr"], {}).get("date", "2026-11-22"))) for g in GUIDES_EN] + [(m["h1"], f"/en/methods/{m['slug']}/", m["desc"], m.get("date", "2026-11-22")) for m in METHODS_EN])
 
 # ---------- sitemap et llms.txt ----------
 urls = [("/", TODAY)] + [(f"/{t}/", TODAY) for t in ["mayotte","la-reunion","guadeloupe","martinique","guyane"]] + \

@@ -1,0 +1,22 @@
+name: IndexNow
+# Prévient Bing, Copilot, Yandex, Seznam et Naver dès qu'une page est publiée ou modifiée.
+on:
+  push:
+    branches: [main]
+    paths: ['**.html', 'sitemap.xml']
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - name: Envoyer les pages modifiées à IndexNow
+        run: |
+          sleep 60
+          KEY=22116335f934407f912eb9b8e4cc4d5c
+          URLS=$(git diff --name-only HEAD~1 HEAD -- '*.html' | grep -v -E '^(404|merci/)' | sed -e 's#index.html$##' -e 's#^#https://www.maintenanceiq.fr/#' | jq -R . | jq -s -c .)
+          [ "$URLS" = "[]" ] && URLS=$(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//' | jq -R . | jq -s -c .)
+          echo "$URLS"
+          curl -s -o /dev/null -w "IndexNow HTTP %{http_code}\n" -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            -d "{\"host\":\"www.maintenanceiq.fr\",\"key\":\"$KEY\",\"keyLocation\":\"https://www.maintenanceiq.fr/$KEY.txt\",\"urlList\":$URLS}"
