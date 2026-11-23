@@ -134,3 +134,38 @@ dict(fr="analyse-des-causes-racines", slug="root-cause-analysis", niveau="Interm
  faq=[("Do I always have to ask exactly five whys?","No. Five is a guide: stop when you reach a cause that allows a concrete action."),("When should I do a root cause analysis?","For any repeated failure, and any costly or dangerous one.")],
  fiches=["noisy-bearing","reading-a-vibration-spectrum"]),
 ]
+
+# ---- Added 23/11/2026 ----
+GUIDES_EN += [
+dict(fr="climatisation-qui-coule", slug="air-conditioner-leaking-water", machine="Air conditioning", domaine="Buildings and installations", niveau="Simple",
+ h1="Air conditioner leaking water: where it comes from and how to stop it",
+ title="Air conditioner leaking water: causes",
+ desc="Water dripping from the indoor unit? Blocked condensate drain, failed condensate pump, dirty filters causing ice: the causes and what to do.",
+ intro="While cooling the air, an air conditioner also removes moisture from it: the condensate. It collects in a drain pan and leaves through a pipe, sometimes helped by a small condensate pump. If water drips from the indoor unit, this path is almost always blocked or interrupted.",
+ signes=["Drops or a trickle of water under the indoor unit.","Damp marks on the wall.","Gurgling noise.","Condensate pump no longer starting, or alarm."],
+ causes=[("Condensate drain pipe blocked (deposits, algae, insects)","Pipe outlet: does water flow out while the AC is running?"),("Condensate pump failed","Pump noise, float, power supply"),("Drain pipe with too little slope, or crushed","Pipe route, low points"),("Dirty filters: the evaporator ices up, then thaws all at once","Filter condition, presence of ice"),("Indoor unit not level","Level of the unit on its bracket")],
+ faire=["Switch off the air conditioner and isolate its power supply.","Clean the filters.","Clear the drain pipe as described in the manual (flush with clean water, no aggressive chemicals).","Check that the condensate pump starts when its reservoir fills; if not, have it replaced.","If water still leaks: have the slope and level checked by an installer."],
+ secu="Isolate the power before any work: water and the indoor unit’s electrics do not mix.",
+ faq=[("Is it serious if the AC leaks a little?","Water damages walls, ceilings and equipment below, and can reach electrical parts. Deal with the cause quickly."),("Why does the AC only leak in very humid weather?","The more humid the air, the more condensate the unit produces: a drain that is barely adequate then overflows.")],
+ related=["air-conditioner-not-cooling","rcd-keeps-tripping","compressor-runs-constantly"]),
+dict(fr="differentiel-qui-saute", slug="rcd-keeps-tripping", machine="Building electrics", domaine="Buildings and installations", niveau="Intermediate",
+ h1="RCD keeps tripping: how to find the faulty circuit",
+ title="RCD keeps tripping: how to find the fault",
+ desc="A tripping RCD (or GFCI) means current is leaking to earth. How to isolate the faulty circuit or appliance, and what needs an electrician.",
+ intro="A residual current device (RCD, called GFCI or ground-fault protection in some countries) trips when part of the current leaks to earth: a faulty appliance, moisture in a junction box or a damaged cable. It protects people. Never bypass it: look for the circuit, then the appliance, causing the leak.",
+ signes=["The RCD trips at the same moment (rain, an appliance starting).","It will not reset.","Random power cuts.","Smell of heat or traces of moisture near a socket or box."],
+ causes=[("Faulty appliance (water heater, machine, motor, outdoor lighting)","Unplug appliances, then plug them back in one at a time"),("Moisture in a box, an outdoor socket or a light fitting","Visual inspection after rain"),("Damaged cable (rodents, building work, crushing)","Insulation test by an electrician"),("Several small leaks adding up on the same RCD","Circuit distribution, by an electrician")],
+ faire=["Unplug all appliances and switch off the circuit breakers protected by this RCD.","Reset the RCD, then switch the breakers back on one at a time: the one that trips the RCD points to the faulty circuit.","On that circuit, plug appliances back in one at a time to find the culprit.","If the fault is in the wiring or cannot be found: call a qualified electrician.","Test the RCD regularly with its “test” button."],
+ secu="Never bypass an RCD or replace it with a less sensitive one. Measurements and work inside distribution boards are for qualified, authorised persons only.",
+ faq=[("Why does the RCD trip when it rains?","Water gets into a socket, a box or an outdoor light and creates a leakage current to earth."),("What is the test button for?","It simulates a leak to check that the RCD actually trips. Testing regularly, as the manufacturer recommends, makes sure it still protects you.")],
+ related=["air-conditioner-leaking-water","electric-motor-overheating","generator-will-not-start"]),
+]
+METHODS_EN.append(dict(fr="plan-de-maintenance-preventive", slug="preventive-maintenance-plan", niveau="Intermediate",
+ h1="Building a preventive maintenance plan in 6 steps",
+ title="Preventive maintenance plan: 6 steps",
+ desc="Asset list, criticality, manufacturer recommendations, task lists, intervals, follow-up: build a simple preventive maintenance plan your team will keep.",
+ intro="A preventive maintenance plan says what to do, on which machine, how often and by whom. It does not need software to exist: above all it must be simple, written down and followed.",
+ sections=[("The 6 steps","<ol><li><strong>Asset list</strong>: list every machine and photograph the nameplates.</li><li><strong>Criticality</strong>: rank machines A, B, C (<a href=\"/en/methods/machine-criticality/\">10-minute grid</a>).</li><li><strong>Manufacturer recommendations</strong>: oil changes, filters, lubrication, statutory inspections.</li><li><strong>Task lists</strong>: for each machine, clear actions (point, tool, expected value).</li><li><strong>Intervals</strong>: based on the manufacturer, criticality and the <a href=\"/en/methods/p-f-curve/\">P-F interval</a>; shorter in hot, humid or dusty conditions.</li><li><strong>Follow-up</strong>: record every job and every reading; review monthly.</li></ol>"),
+  ("Pitfalls to avoid","<ul><li>Trying to cover everything on day one.</li><li>A plan so heavy that nobody keeps it up.</li><li>Forgetting machines that rarely run: generator sets, standby pumps.</li><li>Never adjusting intervals with experience.</li></ul>")],
+ faq=[("Do I need a CMMS for a maintenance plan?","No. A spreadsheet or a logbook kept up to date is enough for a small site; a CMMS becomes useful as the number of machines grows."),("How often should the plan be reviewed?","At least once a year, and after every major failure.")],
+ fiches=["generator-will-not-start","noisy-bearing"]))

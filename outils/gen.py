@@ -29,6 +29,8 @@ def crumbs(items):
 
 def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
     url = SITE + path
+    if len(title) > 60 and title.endswith(" — MaintenanceIQ"):
+        title = title[: -len(" — MaintenanceIQ")]
     if alt:
         fr_u, en_u = (url, SITE + alt) if lang == "fr" else (SITE + alt, url)
         hl = f'<link rel="alternate" hreflang="fr" href="{fr_u}"><link rel="alternate" hreflang="en" href="{en_u}"><link rel="alternate" hreflang="x-default" href="{fr_u}">\n'
@@ -114,7 +116,7 @@ T = [
 ]
 for slug, name, prep, area, intro, points in T:
     title = f"Maintenance industrielle {prep} — MaintenanceIQ"
-    desc = f"Diagnostic de panne gratuit sur téléphone, sans capteur, pour les petits sites industriels {prep}. Pilote gratuit 30 jours, abonnements dès 45 €/mois."
+    desc = f"Diagnostic de panne sur téléphone, sans capteur, pour les petits sites industriels {prep}. Pilote gratuit 30 jours, abonnements dès 45 €/mois."
     others = " · ".join(f'<a href="/{s}/">{n}</a>' for s, n, *_ in T if s != slug)
     msg = f"Bonjour MaintenanceIQ,\n\nJe souhaite demander le pilote gratuit de 30 jours.\nEntreprise : (à préciser)\nTerritoire : {name}\nNombre de machines : (à préciser)\n\nMerci."
     body = f'''<h1>Maintenance industrielle {prep}</h1>
@@ -278,7 +280,7 @@ for dom in ["Machines industrielles", "Bâtiment et installations"]:
         if f["domaine"] == dom: groups.setdefault(f["machine"], []).append(f)
     idx += f'<h2>{dom}</h2>' + "".join(f'<h3>{m}</h3><ul>' + "".join(f'<li><a href="/fiches/{x["slug"]}/"><strong>{x["h1"]}</strong></a> <span class="niv {NIV_CLASS[x["niveau"]]}">{x["niveau"]}</span><br><span class="muted">{x["desc"]}</span></li>' for x in L) + "</ul>" for m, L in groups.items())
 page("/fiches/", "Fiches terrain de maintenance industrielle — MaintenanceIQ",
-     "Pompes, moteurs, roulements, groupes électrogènes, compresseurs, froid, armoires électriques : des fiches pour repérer une panne avant l’arrêt, sans capteur.",
+     "Fiches de dépannage, du simple à l’avancé : pompes, moteurs, roulements, groupes électrogènes, froid, climatisation, électricité du bâtiment.",
      f'''<p class="muted"><a href="/">Accueil</a> › Fiches terrain</p>
 <h1>Fiches terrain</h1>
 <p>Une fiche par problème réel, du plus simple au plus complexe : les signes qui doivent alerter, les causes probables et comment les vérifier, puis quoi faire avant la casse. {len(FICHES)} fiches pour les machines industrielles et les installations du bâtiment, avec un niveau de difficulté : <span class="niv n1">Simple</span> <span class="niv n2">Intermédiaire</span> <span class="niv n3">Avancé</span>. Pour organiser la maintenance, voir les <a href="/methodes/">méthodes</a>.</p>
@@ -545,7 +547,7 @@ home_en = f'''<h1>Fix machine problems before they stop your business</h1>
 <span class="muted">Or by e-mail: <a href="mailto:sahali.prof@gmail.com">sahali.prof@gmail.com</a> · WhatsApp +33 6 98 71 18 48</span></div>
 <h2>What MaintenanceIQ does not do</h2>
 <p>It does not see your machine, does not predict a failure date, does not connect to your equipment and does not replace an on-site technician or mandatory inspections.</p>'''
-page("/en/", "MaintenanceIQ — machine troubleshooting and maintenance, worldwide",
+page("/en/", "MaintenanceIQ — machine troubleshooting and maintenance",
      "Practical troubleshooting guides and maintenance methods for industrial sites and buildings, from simple to complex, plus a free 30-day remote pilot.",
      home_en,
      [ORG, {"@type": "WebSite", "@id": SITE + "/en/#site", "url": SITE + "/en/", "name": "MaintenanceIQ", "inLanguage": "en", "publisher": {"@id": SITE + "/#org"}},
