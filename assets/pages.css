@@ -40,3 +40,4 @@ h3{font:700 21px/1.2 var(--body);margin:22px 0 6px}
 .cas{border-left:4px solid #3FA66A}
 
 .qopts{display:grid;gap:8px}.qopt{text-align:left;padding:12px 14px;font:500 16px var(--body);border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);cursor:pointer}.qopt:disabled{cursor:default;opacity:.85}.qopt.bon{border-color:#3FA66A;background:#E6F4EA;color:#1D4D2E;opacity:1}.qopt.faux{border-color:#C0392B;background:#FBE9E7;color:#7A1F14;opacity:1}.qex{margin:10px 0 0}.qv{font-weight:700}
+.qopt.sel{border-color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}.corr li{margin-bottom:12px}.corr .cok{border-left:4px solid #3FA66A;padding-left:8px}.corr .cko{border-left:4px solid #C0392B;padding-left:8px}

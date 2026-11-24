@@ -50,7 +50,7 @@ TODAY = "2026-11-22"
 ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6829528595387726" crossorigin="anonymous"></script>\n'
 
 FOOT = ('<footer><div class="wrap">© 2026 MaintenanceIQ — SAHALI, Bourg-en-Bresse.\n'
-        '<nav><a href="/">Diagnostic gratuit</a><a href="/fiches/">Fiches terrain</a><a href="/methodes/">Méthodes</a><a href="/calculateurs/">Outils gratuits</a><a href="/glossaire/">Glossaire</a><a href="/a-propos/">À propos</a>'
+        '<nav><a href="/">Diagnostic gratuit</a><a href="/fiches/">Fiches terrain</a><a href="/methodes/">Méthodes</a><a href="/calculateurs/">Outils gratuits</a><a href="/habilitation-electrique/">Habilitation électrique</a><a href="/glossaire/">Glossaire</a><a href="/a-propos/">À propos</a>'
         '<a href="/mentions-legales/">Mentions légales</a><a href="/cgv/">Conditions de vente</a>'
         '<a href="/confidentialite/">Confidentialité</a><a href="mailto:sahali.prof@gmail.com">Contact</a></nav>'
         '<nav><a href="/mayotte/">Mayotte</a><a href="/la-reunion/">La Réunion</a><a href="/guadeloupe/">Guadeloupe</a>'
@@ -85,7 +85,7 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
         foot = FOOT
         loc = "fr_FR"
         switch = f'<a class="back" href="{alt}" hreflang="en" style="margin-left:14px">EN</a>' if alt else '<a class="back" href="/en/" hreflang="en" style="margin-left:14px">EN</a>'
-    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/", "/calculateurs/", "/habilitation-electrique/") or path.startswith("/habilitation-electrique/") or path.startswith("/calculateurs/") or path.startswith("/modeles/")):
+    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/", "/calculateurs/", "/habilitation-electrique/", "/qcm-habilitation-electrique/") or path.startswith("/habilitation-electrique/") or path.startswith("/calculateurs/") or path.startswith("/modeles/")):
         body += NL_CARD
     if og_type == "article":
         q = urllib.parse.quote(url, safe="")
@@ -702,7 +702,7 @@ hub = ('<p class="muted"><a href="/">Accueil</a> › Outils gratuits</p><h1>Outi
        '<p>Des calculateurs qui font une seule chose, avec leur formule et un exemple chiffré, et des modèles à imprimer. Gratuits, sans inscription : tout se calcule sur votre téléphone.</p>'
        '<h2>Calculateurs</h2><ul><li><a href="/calculateur-cout-panne/"><strong>Calculer le coût d’une panne</strong></a><br><span class="muted">Production perdue, main-d’œuvre, pièces en urgence : ce que coûte vraiment un arrêt.</span></li>'
        + "".join(f'<li><a href="/calculateurs/{c["slug"]}/"><strong>{c["h1"]}</strong></a><br><span class="muted">{c["desc"]}</span></li>' for c in CALCS) + '</ul>'
-       '<h2>Fiche de révision</h2><ul><li><a href="/habilitation-electrique/"><strong>Habilitation électrique : tous les symboles + quiz</strong></a><br><span class="muted">B0, BR, BS, BC, B1V, B2V, H0V, BP, BF-HF, véhicules en L, rangés par thème.</span></li></ul>'
+       '<h2>Fiche de révision</h2><ul><li><a href="/qcm-habilitation-electrique/"><strong>QCM habilitation électrique : examen blanc corrigé</strong></a><br><span class="muted">Questions tirées au hasard, score, correction à imprimer.</span></li><li><a href="/habilitation-electrique/"><strong>Habilitation électrique : tous les symboles + quiz</strong></a><br><span class="muted">B0, BR, BS, BC, B1V, B2V, H0V, BP, BF-HF, véhicules en L, rangés par thème.</span></li></ul>'
        '<h2>Modèles à imprimer</h2><ul>' + "".join(f'<li><a href="/modeles/{m["slug"]}/"><strong>{m["h1"]}</strong></a><br><span class="muted">{m["desc"]}</span></li>' for m in MODELES) + '</ul>'
        '<div class="card">Un outil vous manque ? Écrivez-nous sur <a href="https://wa.me/33698711848">WhatsApp</a> : les demandes les plus fréquentes sont ajoutées en priorité.</div>')
 page("/calculateurs/", "Outils gratuits de maintenance : calculateurs et modèles — MaintenanceIQ",
@@ -744,6 +744,7 @@ def _hab():
 <div class="card"><strong>Rappel essentiel.</strong> L’habilitation n’est pas un diplôme : c’est l’<strong>employeur</strong> qui la délivre par écrit, après une formation adaptée et un avis favorable. Elle ne vaut que pour les opérations inscrites sur le titre, et se recycle en général tous les 3 ans.</div>
 <h2>Comment lire un symbole</h2><ul>{lect}</ul>
 <p>Exemple : <strong>B2V Essai</strong> = basse tension (B), chargé de travaux (2), au voisinage (V), autorisé à faire des essais (attribut).</p>
+<div class="card"><strong>Examen blanc :</strong> <a href="/qcm-habilitation-electrique/">QCM habilitation électrique gratuit, questions tirées au hasard, score et correction PDF</a>.</div>
 <h2>Une page par symbole</h2><p>{" · ".join(f'<a href="/habilitation-electrique/{x["slug"]}/">{x["sym"].split(" / ")[0] if x["slug"].startswith("b1vl") else x["sym"]}</a>' for x in SYMBOLES)}</p>
 <h2>Sommaire par thème</h2><ul>{toc}<li><a href="#quiz">Questionnaire avec réponses</a></li></ul>
 {secs}
@@ -786,7 +787,7 @@ def _hab():
 <h2 id="quiz">Questionnaire {short} : testez-vous ({len(QZ[x["slug"]])} questions)</h2>
 {quiz_html(QZ[x["slug"]])}
 <h2>Questions fréquentes</h2>{faqh}
-<div class="card">Les autres symboles : <a href="/habilitation-electrique/">la liste complète par thème</a> et <a href="/habilitation-electrique/#quiz">le questionnaire général de 12 questions</a>.</div>
+<div class="card"><strong>Examen blanc :</strong> <a href="/qcm-habilitation-electrique/">le QCM complet, tous symboles mélangés, avec score et correction PDF</a>. Les autres symboles : <a href="/habilitation-electrique/">la liste complète par thème</a> et <a href="/habilitation-electrique/#quiz">le questionnaire général de 12 questions</a>.</div>
 <h2>Symboles proches</h2><ul>{vois}</ul>
 <p class="muted">Page d’information. Seuls la norme NF C 18-510 (NF C 18-550 pour les véhicules), votre formation et le titre délivré par votre employeur font foi.</p>"""
         sld = [ORG, {"@type": "TechArticle", "headline": f"Habilitation électrique {x['sym']}", "description": x["resume"], "url": SITE + u, "inLanguage": "fr",
@@ -798,11 +799,93 @@ def _hab():
          "Tous les symboles d’habilitation électrique NF C 18-510 et NF C 18-550 rangés par thème, avec un questionnaire de 12 questions et les réponses.", body, ld, og_type="article")
 _hab()
 
+# ---------- QCM / examen blanc habilitation électrique ----------
+def _qcm():
+    SYM_NAME = {x["slug"]: x["sym"] for x in SYMBOLES}
+    bank = [{"t": "general", "q": q, "o": o, "a": a, "e": e} for q, o, a, e in QUIZ]
+    for sl, L in QZ.items():
+        bank += [{"t": sl, "q": q, "o": o, "a": a, "e": e} for q, o, a, e in L]
+    opts = '<option value="all">Tous les symboles (' + str(len(bank)) + ' questions)</option>' + "".join(f'<option value="{sl}">{SYM_NAME[sl]} ({len(QZ[sl])} questions)</option>' for sl in QZ)
+    app = r'''<div id="qcm-setup" class="card" style="display:grid;gap:12px">
+<label>Thème<br><select id="qt" style="width:100%;margin-top:4px;padding:10px;font:500 17px var(--body);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)">OPTS</select></label>
+<label>Nombre de questions<br><select id="qn" style="width:100%;margin-top:4px;padding:10px;font:500 17px var(--body);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)"><option value="10">10 questions (5 min)</option><option value="20" selected>20 questions (10 min)</option><option value="40">40 questions (20 min)</option><option value="999">Toutes les questions du thème</option></select></label>
+<button class="btn" id="qgo" type="button" style="border:0;cursor:pointer;font-size:17px">Commencer l’examen blanc</button>
+<p class="muted" style="margin:0">Gratuit, sans inscription. Les questions sont tirées au hasard : chaque essai est différent.</p></div>
+<div id="qcm-run" hidden><p class="card" id="qbar" aria-live="polite"></p><div id="qbox"></div>
+<p><button class="btn" id="qend" type="button" style="border:0;cursor:pointer;font-size:17px">Terminer et voir la correction</button></p></div>
+<div id="qcm-res" hidden></div>
+<script>(function(){var B=BANK,S=SYMS,cur=[],ans={},t0=0,tm=null;
+function $(i){return document.getElementById(i)}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=a[i];a[i]=a[j];a[j]=x}return a}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function bar(){var n=Object.keys(ans).length,s=Math.floor((Date.now()-t0)/1000);$("qbar").textContent="Répondu : "+n+" / "+cur.length+" · Temps : "+Math.floor(s/60)+" min "+("0"+s%60).slice(-2)+" s"}
+$("qgo").onclick=function(){var t=$("qt").value,n=+$("qn").value;var pool=t==="all"?B:B.filter(function(x){return x.t===t});cur=shuf(pool).slice(0,n).map(function(x){var ix=shuf(x.o.map(function(_,i){return i}));return {t:x.t,q:x.q,e:x.e,o:ix.map(function(i){return x.o[i]}),a:ix.indexOf(x.a)}});ans={};
+var h="";cur.forEach(function(x,k){h+='<div class="card quiz" id="r'+k+'"><p><strong>'+(k+1)+". "+esc(x.q)+'</strong></p><div class="qopts">'+x.o.map(function(o,j){return '<button type="button" class="qopt" data-k="'+k+'" data-j="'+j+'">'+esc(o)+"</button>"}).join("")+"</div></div>"});
+$("qbox").innerHTML=h;$("qcm-setup").hidden=true;$("qcm-run").hidden=false;$("qcm-res").hidden=true;t0=Date.now();clearInterval(tm);tm=setInterval(bar,1000);bar();
+document.querySelectorAll("#qbox .qopt").forEach(function(b){b.onclick=function(){var k=b.dataset.k;ans[k]=+b.dataset.j;document.querySelectorAll('#r'+k+' .qopt').forEach(function(o){o.classList.remove("sel")});b.classList.add("sel");bar()}});window.scrollTo(0,$("qcm-run").offsetTop-20)};
+$("qend").onclick=function(){var n=cur.length,miss=n-Object.keys(ans).length;if(miss>0&&!confirm(miss+" question(s) sans réponse. Corriger quand même ?"))return;clearInterval(tm);
+var ok=0,c="";cur.forEach(function(x,k){var g=ans[k]===x.a;if(g)ok++;c+='<li class="'+(g?"cok":"cko")+'"><strong>'+esc(x.q)+"</strong><br>"+(ans[k]===undefined?"Sans réponse":"Votre réponse : "+esc(x.o[ans[k]]))+(g?" ✔":" ✘")+"<br>Bonne réponse : <strong>"+esc(x.o[x.a])+"</strong>. "+esc(x.e)+(S[x.t]?' <a href="/habilitation-electrique/'+x.t+'/">Revoir '+esc(S[x.t])+"</a>":"")+"</li>"});
+var p=Math.round(ok*100/n),s=Math.floor((Date.now()-t0)/1000),m=p>=80?"Objectif atteint : vous maîtrisez bien le sujet.":p>=60?"Pas mal, mais révisez les erreurs avant votre formation ou votre recyclage.":"À retravailler : relisez les pages des symboles concernés, puis refaites un essai.";
+var txt="J’ai eu "+ok+"/"+n+" au QCM habilitation électrique de MaintenanceIQ. Et vous ?",u=encodeURIComponent(location.origin+location.pathname),e=encodeURIComponent(txt+" "+location.origin+location.pathname);
+$("qcm-res").innerHTML='<div class="card"><p style="font-size:28px;margin:0"><strong>'+ok+" / "+n+"</strong> ("+p+" %)</p><p>"+m+'</p><p class="muted">Temps : '+Math.floor(s/60)+" min "+("0"+s%60).slice(-2)+' s · Objectif conseillé : 80 %</p>'+
+'<p class="noprint"><button class="btn" type="button" onclick="window.print()" style="border:0;cursor:pointer;font-size:17px">Imprimer ou enregistrer le corrigé en PDF</button></p>'+
+'<p class="noprint"><strong>Défiez vos collègues :</strong> <a href="https://wa.me/?text='+e+'" target="_blank" rel="noopener">WhatsApp</a> · <a href="https://www.linkedin.com/sharing/share-offsite/?url='+u+'" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://www.facebook.com/sharer/sharer.php?u='+u+'" target="_blank" rel="noopener">Facebook</a></p>'+
+'<p class="noprint"><button class="btn" type="button" id="qagain" style="border:0;cursor:pointer;font-size:17px;background:var(--ink)">Refaire un examen</button></p></div><h2>Correction détaillée</h2><ol class="corr">'+c+"</ol>";
+$("qcm-run").hidden=true;$("qcm-res").hidden=false;$("qagain").onclick=function(){$("qcm-res").hidden=true;$("qcm-setup").hidden=false;window.scrollTo(0,0)};
+try{var h=JSON.parse(localStorage.getItem("miq_qcm")||"[]");h.push({d:Date.now(),s:ok,n:n});localStorage.setItem("miq_qcm",JSON.stringify(h.slice(-20)))}catch(_){}
+window.scrollTo(0,$("qcm-res").offsetTop-20)};
+try{var h=JSON.parse(localStorage.getItem("miq_qcm")||"[]");if(h.length){var l=h[h.length-1];$("qcm-setup").insertAdjacentHTML("beforeend",'<p class="muted" style="margin:0">Votre dernier score sur cet appareil : '+l.s+" / "+l.n+" ("+h.length+" essai"+(h.length>1?"s":"")+").</p>")}}catch(_){}
+})()</script>'''
+    app = app.replace("OPTS", opts).replace("BANK", json.dumps(bank, ensure_ascii=False)).replace("SYMS", json.dumps(SYM_NAME, ensure_ascii=False))
+    liens = " · ".join(f'<a href="/habilitation-electrique/{x["slug"]}/">{x["sym"].split(" / ")[0]}</a>' for x in SYMBOLES)
+    body = f"""<p class="muted noprint"><a href="/">Accueil</a> › <a href="/habilitation-electrique/">Habilitations électriques</a> › QCM</p>
+<h1>QCM habilitation électrique gratuit : examen blanc corrigé</h1>
+<p class="noprint">{len(bank)} questions corrigées sur tous les symboles de la NF C 18-510 et de la NF C 18-550 : B0, H0V, BS, BE Manœuvre, BR, BC, B1V, B2V, BP, BF-HF, haute tension et véhicules électriques. Choisissez un symbole ou mélangez tout, répondez, puis obtenez votre score et la correction détaillée, à imprimer ou enregistrer en PDF.</p>
+{app}
+<div class="noprint"><h2>Réviser symbole par symbole</h2><p>{liens}</p>
+<h2>Questions fréquentes</h2>
+<h3>Ce QCM délivre-t-il une habilitation ?</h3><p>Non. C’est un entraînement gratuit. L’habilitation est délivrée par l’employeur après une formation par un organisme.</p>
+<h3>Quel score viser ?</h3><p>Visez au moins 80 % avant une formation ou un recyclage, et relisez chaque erreur dans la correction.</p>
+<h3>Mes réponses sont-elles envoyées quelque part ?</h3><p>Non. Le QCM fonctionne sur votre téléphone ; seul votre dernier score est gardé sur cet appareil.</p>
+<div class="card">Formateur, organisme ou entreprise ? <a href="/qcm-habilitation-electrique/integrer/">Intégrez ce QCM gratuitement sur votre site</a>.</div></div>"""
+    url = SITE + "/qcm-habilitation-electrique/"
+    faq = [("Ce QCM délivre-t-il une habilitation ?", "Non. C’est un entraînement gratuit. L’habilitation est délivrée par l’employeur après une formation par un organisme."),
+           ("Quel score viser ?", "Visez au moins 80 % avant une formation ou un recyclage, et relisez chaque erreur dans la correction."),
+           ("Mes réponses sont-elles envoyées quelque part ?", "Non. Le QCM fonctionne sur votre téléphone ; seul votre dernier score est gardé sur cet appareil.")]
+    ld = [ORG, {"@type": "WebApplication", "name": "QCM habilitation électrique gratuit", "url": url, "applicationCategory": "EducationalApplication", "operatingSystem": "Tous", "inLanguage": "fr",
+                "isAccessibleForFree": True, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "publisher": {"@id": SITE + "/#org"}},
+          {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},
+          crumbs([("Accueil", "/"), ("Habilitations électriques", "/habilitation-electrique/"), ("QCM", "/qcm-habilitation-electrique/")])]
+    page("/qcm-habilitation-electrique/", "QCM habilitation électrique gratuit : examen blanc corrigé — MaintenanceIQ",
+         f"Examen blanc gratuit d’habilitation électrique : {len(bank)} questions corrigées (B0, BS, BR, BC, B1V, B2V, H0V, BP, véhicules), score, correction PDF.", body, ld)
+    # version intégrable (iframe) : page minimale, non indexée, lien retour
+    css = open(os.path.join(ROOT, "assets/pages.css")).read() if False else ""
+    emb = f"""<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>QCM habilitation électrique — MaintenanceIQ</title><link rel="canonical" href="{url}"><link rel="stylesheet" href="/assets/fonts.css"><link rel="stylesheet" href="/assets/pages.css">
+<style>body{{margin:0;padding:12px;background:var(--bg,#fff)}}</style></head><body><main class="wrap">
+<p><strong>QCM habilitation électrique</strong> · {len(bank)} questions corrigées</p>{app}
+<p class="muted" style="text-align:center">QCM gratuit proposé par <a href="{url}" target="_blank" rel="noopener">MaintenanceIQ, QCM habilitation électrique</a></p></main></body></html>"""
+    os.makedirs(os.path.join(ROOT, "embed/qcm-habilitation-electrique"), exist_ok=True)
+    open(os.path.join(ROOT, "embed/qcm-habilitation-electrique/index.html"), "w").write(emb)
+    code = _h.escape(f'<iframe src="{SITE}/embed/qcm-habilitation-electrique/" width="100%" height="900" style="border:0;max-width:760px" title="QCM habilitation électrique" loading="lazy"></iframe>\n<p><a href="{url}">QCM habilitation électrique gratuit</a> par MaintenanceIQ</p>')
+    ib = f"""<p class="muted"><a href="/">Accueil</a> › <a href="/qcm-habilitation-electrique/">QCM habilitation électrique</a> › Intégrer</p>
+<h1>Intégrez le QCM habilitation électrique sur votre site, gratuitement</h1>
+<p>Organisme de formation, entreprise, lycée professionnel, CFA : proposez à vos stagiaires un examen blanc de {len(bank)} questions corrigées, directement sur votre site ou votre intranet. Gratuit, sans compte, sans publicité dans le module, mis à jour automatiquement.</p>
+<h2>Le code à copier</h2><p>Collez ce code dans votre page (bloc HTML) :</p>
+<pre style="white-space:pre-wrap;word-break:break-all;background:var(--bg);border:1px solid var(--line);padding:12px;border-radius:6px;font-size:14px">{code}</pre>
+<h2>Aperçu</h2><iframe src="/embed/qcm-habilitation-electrique/" width="100%" height="700" style="border:1px solid var(--line);border-radius:8px" title="Aperçu du QCM" loading="lazy"></iframe>
+<h2>Conditions</h2><ul><li>Usage gratuit, y compris en formation payante.</li><li>Merci de garder le lien « par MaintenanceIQ » sous le module.</li><li>Une question à corriger ou à ajouter ? Écrivez-nous sur <a href="https://wa.me/33698711848">WhatsApp</a>.</li></ul>"""
+    page("/qcm-habilitation-electrique/integrer/", "Intégrer le QCM habilitation électrique sur votre site — MaintenanceIQ",
+         "Code gratuit pour intégrer un examen blanc d’habilitation électrique corrigé sur le site d’un organisme de formation ou d’une entreprise.", ib,
+         [ORG, crumbs([("Accueil", "/"), ("QCM habilitation électrique", "/qcm-habilitation-electrique/"), ("Intégrer", "/qcm-habilitation-electrique/integrer/")])])
+    return len(bank)
+NB_QCM = _qcm()
+
 # ---------- sitemap et llms.txt ----------
 urls = [("/", TODAY)] + [(f"/{t}/", TODAY) for t in ["mayotte","la-reunion","guadeloupe","martinique","guyane"]] + \
        [("/fiches/", TODAY)] + [(f"/fiches/{f['slug']}/", TODAY) for f in FICHES] + \
        [("/methodes/", TODAY)] + [(f"/methodes/{m['slug']}/", TODAY) for m in METHODES] + \
-       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY), ("/habilitation-electrique/", TODAY)] + [(f"/habilitation-electrique/{x['slug']}/", TODAY) for x in SYMBOLES] + \
+       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY), ("/habilitation-electrique/", TODAY), ("/qcm-habilitation-electrique/", TODAY), ("/qcm-habilitation-electrique/integrer/", TODAY)] + [(f"/habilitation-electrique/{x['slug']}/", TODAY) for x in SYMBOLES] + \
        [(f"/calculateurs/{c['slug']}/", TODAY) for c in CALCS] + [(f"/modeles/{m['slug']}/", TODAY) for m in MODELES] + \
        [("/en/", TODAY), ("/en/guides/", TODAY), ("/en/methods/", TODAY), ("/en/about/", TODAY), ("/en/downtime-cost-calculator/", TODAY)] + \
        [(f"/en/guides/{g['slug']}/", TODAY) for g in GUIDES_EN] + [(f"/en/methods/{m['slug']}/", TODAY) for m in METHODS_EN] + \
@@ -818,7 +901,7 @@ L = ["# MaintenanceIQ", "",
  "- [Accueil, diagnostic gratuit et offres](https://www.maintenanceiq.fr/)", "- [Fiches terrain](https://www.maintenanceiq.fr/fiches/)", "- [Méthodes de maintenance](https://www.maintenanceiq.fr/methodes/)",
  "- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)", "- [Glossaire](https://www.maintenanceiq.fr/glossaire/)", "- [À propos](https://www.maintenanceiq.fr/a-propos/)", "",
  "## English", "- [Home and plans](https://www.maintenanceiq.fr/en/)", "- [Troubleshooting guides](https://www.maintenanceiq.fr/en/guides/)", "- [Maintenance methods](https://www.maintenanceiq.fr/en/methods/)", "- [Downtime cost calculator](https://www.maintenanceiq.fr/en/downtime-cost-calculator/)", "- [About](https://www.maintenanceiq.fr/en/about/)", ""]
-L += ["## Habilitations électriques (FR)", f"- [Tous les symboles d'habilitation électrique par thème, avec quiz]({SITE}/habilitation-electrique/)"] + [f"- [Habilitation électrique {x['sym']}]({SITE}/habilitation-electrique/{x['slug']}/): {x['resume']}" for x in SYMBOLES] + [""]
+L += ["## Habilitations électriques (FR)", f"- [Tous les symboles d'habilitation électrique par thème, avec quiz]({SITE}/habilitation-electrique/)", f"- [QCM habilitation électrique gratuit, examen blanc corrigé]({SITE}/qcm-habilitation-electrique/)"] + [f"- [Habilitation électrique {x['sym']}]({SITE}/habilitation-electrique/{x['slug']}/): {x['resume']}" for x in SYMBOLES] + [""]
 L += ["## Outils gratuits (FR)"] + [f"- [{c['title']}]({SITE}/calculateurs/{c['slug']}/): {c['desc']}" for c in CALCS] + [f"- [{m['title']}]({SITE}/modeles/{m['slug']}/): {m['desc']}" for m in MODELES] + [""]
 L += ["## Fiches terrain (FR)"] + [f"- [{f['title']}]({SITE}/fiches/{f['slug']}/): {f['desc']}" for f in FICHES] + [""]
 L += ["## Méthodes (FR)"] + [f"- [{m['title']}]({SITE}/methodes/{m['slug']}/): {m['desc']}" for m in METHODES] + [""]
