@@ -6,6 +6,8 @@ from contenu_fr_plus import METHODES
 from schemas_fr import SCHEMAS, CAS
 from calcs_fr import CALCS, MODELES
 from habilitations_fr import THEMES, LECTURE, QUIZ
+from symboles_fr import SYMBOLES
+from quiz_symboles_fr import QZ
 from PIL import Image, ImageDraw, ImageFont
 _F = "/usr/share/fonts/opentype/inter/"
 def make_og(name, kicker, title):
@@ -83,7 +85,7 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
         foot = FOOT
         loc = "fr_FR"
         switch = f'<a class="back" href="{alt}" hreflang="en" style="margin-left:14px">EN</a>' if alt else '<a class="back" href="/en/" hreflang="en" style="margin-left:14px">EN</a>'
-    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/", "/calculateurs/", "/habilitation-electrique/") or path.startswith("/calculateurs/") or path.startswith("/modeles/")):
+    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/", "/calculateurs/", "/habilitation-electrique/") or path.startswith("/habilitation-electrique/") or path.startswith("/calculateurs/") or path.startswith("/modeles/")):
         body += NL_CARD
     if og_type == "article":
         q = urllib.parse.quote(url, safe="")
@@ -97,7 +99,7 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
                  f'<a href="#" onclick="navigator.clipboard&&navigator.clipboard.writeText(\'{url}\');this.textContent=\'{lab[2]}\';return false">{lab[1]}</a></div>')
     og_img = "/og-image.png"
     if og_type == "article":
-        kick = ("MaintenanceIQ · Troubleshooting guide" if "/guides/" in path else "MaintenanceIQ · Maintenance method") if lang == "en" else ("MaintenanceIQ · Fiche terrain" if path.startswith("/fiches/") else "MaintenanceIQ · Méthode de maintenance")
+        kick = ("MaintenanceIQ · Troubleshooting guide" if "/guides/" in path else "MaintenanceIQ · Maintenance method") if lang == "en" else ("MaintenanceIQ · Fiche terrain" if path.startswith("/fiches/") else "MaintenanceIQ · Habilitation électrique" if path.startswith("/habilitation-electrique/") else "MaintenanceIQ · Méthode de maintenance")
         h = title[: -len(" — MaintenanceIQ")] if title.endswith(" — MaintenanceIQ") else title
         og_img = make_og(path.strip("/").replace("/", "-"), kick, h)
         for node in ld:
@@ -709,29 +711,40 @@ page("/calculateurs/", "Outils gratuits de maintenance : calculateurs et modèle
 
 
 # ---------- Habilitations électriques ----------
+def quiz_html(Q):
+    qz = ""
+    for k, (q, opts, ok, ex) in enumerate(Q):
+        bt = "".join(f'<button type="button" class="qopt" data-q="{k}" data-i="{j}" data-ok="{1 if j==ok else 0}">{o}</button>' for j, o in enumerate(opts))
+        qz += f'<div class="card quiz" id="q{k}"><p><strong>{k+1}. {q}</strong></p><div class="qopts">{bt}</div><p class="qex" hidden><span class="qv"></span> {ex}</p></div>'
+    corr = "".join(f"<li><strong>{q}</strong><br>Réponse : {opts[ok]}. {ex}</li>" for q, opts, ok, ex in Q)
+    js = ('<script>(function(){var done={},score=0,n=' + str(len(Q)) + ';document.querySelectorAll(".qopt").forEach(function(b){b.addEventListener("click",function(){var q=b.dataset.q;if(done[q])return;done[q]=1;'
+          'var box=document.getElementById("q"+q);box.querySelectorAll(".qopt").forEach(function(o){o.disabled=true;if(o.dataset.ok==="1")o.classList.add("bon")});'
+          'if(b.dataset.ok==="1"){score++;box.querySelector(".qv").textContent="Bonne réponse."}else{b.classList.add("faux");box.querySelector(".qv").textContent="Pas tout à fait."}'
+          'box.querySelector(".qex").hidden=false;var c=Object.keys(done).length;document.getElementById("score").textContent="Score : "+score+" / "+c+(c===n?(score===n?" — sans faute !":" — questionnaire terminé. Relisez la correction ci-dessous."):"")})})})()</script>')
+    return (f'<p>Touchez une réponse : la bonne s’affiche avec l’explication.</p><p class="card" id="score" aria-live="polite">Score : 0 / 0</p>{qz}'
+            f'<details class="card"><summary><strong>Voir toute la correction ({len(Q)} questions)</strong></summary><ol>{corr}</ol></details>{js}')
+
 def _hab():
     import html as H
+    SLUG_OF = {"B0":"b0","B0 Chargé de chantier":"b0","H0":"h0-h0v","H0V":"h0-h0v","BF-HF":"bf-hf","B1":"b1-b1v","B1V":"b1-b1v","B2":"b2-b2v","B2V":"b2-b2v","B2V Essai":"b2-b2v",
+               "H1 / H1V":"hc-h1-h2","H2 / H2V":"hc-h1-h2","H2V Essai":"hc-h1-h2","BC":"bc","HC":"bc","BR":"br","BS":"bs","BE Manœuvre / HE Manœuvre":"be-manoeuvre",
+               "BE Mesurage / HE Mesurage":"be-specifiques","BE Vérification / HE Vérification":"be-specifiques","BE Essai / HE Essai":"be-specifiques","BP":"bp",
+               "B0L":"b0l","B1L / B1VL":"b1vl-b2vl-bcl","B2L / B2VL":"b1vl-b2vl-bcl","BCL":"b1vl-b2vl-bcl","BEL / BRL":"b1vl-b2vl-bcl","B1XL / B2XL":"b1vl-b2vl-bcl"}
+    lk = lambda s: f'<a href="/habilitation-electrique/{SLUG_OF[s]}/">{s}</a>' if s in SLUG_OF else s
     lect = "".join(f"<li><strong>{a}</strong> — {b}</li>" for a, b in LECTURE)
     toc = "".join(f'<li><a href="#t{i}">{t[0]}</a></li>' for i, t in enumerate(THEMES))
     secs = ""
     for i, (titre, intro, rows) in enumerate(THEMES):
-        tr = "".join(f"<tr><td><strong>{s}</strong></td><td>{n}</td><td>{d}</td></tr>" for s, n, d in rows)
+        tr = "".join(f"<tr><td><strong>{lk(s)}</strong></td><td>{n}</td><td>{d}</td></tr>" for s, n, d in rows)
         secs += f'<h2 id="t{i}">{titre}</h2><p>{intro}</p><div class="tw"><table><thead><tr><th>Symbole</th><th>Qui</th><th>Ce qu’il autorise</th></tr></thead><tbody>{tr}</tbody></table></div>'
-    qz = ""
-    for k, (q, opts, ok, ex) in enumerate(QUIZ):
-        bt = "".join(f'<button type="button" class="qopt" data-q="{k}" data-i="{j}" data-ok="{1 if j==ok else 0}">{o}</button>' for j, o in enumerate(opts))
-        qz += f'<div class="card quiz" id="q{k}"><p><strong>{k+1}. {q}</strong></p><div class="qopts">{bt}</div><p class="qex" hidden><span class="qv"></span> {ex}</p></div>'
     faq = [(q, opts[ok] + ". " + ex) for q, opts, ok, ex in QUIZ]
-    js = ('<script>(function(){var done={},score=0,n=' + str(len(QUIZ)) + ';document.querySelectorAll(".qopt").forEach(function(b){b.addEventListener("click",function(){var q=b.dataset.q;if(done[q])return;done[q]=1;'
-          'var box=document.getElementById("q"+q);box.querySelectorAll(".qopt").forEach(function(o){o.disabled=true;if(o.dataset.ok==="1")o.classList.add("bon")});'
-          'if(b.dataset.ok==="1"){score++;box.querySelector(".qv").textContent="Bonne réponse."}else{b.classList.add("faux");box.querySelector(".qv").textContent="Pas tout à fait."}'
-          'box.querySelector(".qex").hidden=false;var c=Object.keys(done).length;document.getElementById("score").textContent="Score : "+score+" / "+c+(c===n?" — questionnaire terminé.":"")})})})()</script>')
     body = f"""<p class="muted"><a href="/">Accueil</a> › <a href="/methodes/">Méthodes</a> › Habilitations électriques</p>
 <h1>Habilitation électrique : tous les symboles expliqués, par thème</h1>
 <p>B0, H0V, B1V, B2V, BR, BS, BC, BE Manœuvre, BP, BF-HF, B1L… Chaque symbole dit précisément ce qu’une personne a le droit de faire sur ou près d’une installation électrique. Voici la liste complète, rangée par thème, puis un questionnaire de 12 questions avec les réponses pour vérifier que tout est clair.</p>
 <div class="card"><strong>Rappel essentiel.</strong> L’habilitation n’est pas un diplôme : c’est l’<strong>employeur</strong> qui la délivre par écrit, après une formation adaptée et un avis favorable. Elle ne vaut que pour les opérations inscrites sur le titre, et se recycle en général tous les 3 ans.</div>
 <h2>Comment lire un symbole</h2><ul>{lect}</ul>
 <p>Exemple : <strong>B2V Essai</strong> = basse tension (B), chargé de travaux (2), au voisinage (V), autorisé à faire des essais (attribut).</p>
+<h2>Une page par symbole</h2><p>{" · ".join(f'<a href="/habilitation-electrique/{x["slug"]}/">{x["sym"].split(" / ")[0] if x["slug"].startswith("b1vl") else x["sym"]}</a>' for x in SYMBOLES)}</p>
 <h2>Sommaire par thème</h2><ul>{toc}<li><a href="#quiz">Questionnaire avec réponses</a></li></ul>
 {secs}
 <h2>Quel symbole pour quel métier ?</h2><div class="tw"><table><thead><tr><th>Métier</th><th>Symbole le plus courant</th></tr></thead><tbody>
@@ -744,16 +757,43 @@ def _hab():
 <tr><td>Mécanicien automobile sur véhicule électrique ou hybride</td><td>B0L, puis B1VL / B2VL / BCL selon les tâches</td></tr>
 </tbody></table></div>
 <h2 id="quiz">Questionnaire : testez-vous (12 questions)</h2>
-<p>Touchez une réponse : la bonne s’affiche avec l’explication.</p>
-<p class="card" id="score" aria-live="polite">Score : 0 / 0</p>
-{qz}
+{quiz_html(QUIZ)}
 <p class="muted">Page d’information. Seuls la norme NF C 18-510 (et NF C 18-550 pour les véhicules), votre formation et le titre délivré par votre employeur font foi. Sources : INRS (brochure ED 6127 et dossier Risques électriques).</p>
-<h2>Pour aller plus loin</h2><ul><li><a href="/methodes/">Les méthodes de maintenance</a></li><li><a href="/fiches/armoire-electrique-connexion-qui-chauffe/">Armoire électrique : connexion qui chauffe</a></li><li><a href="/calculateurs/intensite-moteur-triphase/">Calculer l’intensité d’un moteur triphasé</a></li><li><a href="/glossaire/">Glossaire</a></li></ul>{js}"""
+<h2>Pour aller plus loin</h2><ul><li><a href="/methodes/">Les méthodes de maintenance</a></li><li><a href="/fiches/armoire-electrique-connexion-qui-chauffe/">Armoire électrique : connexion qui chauffe</a></li><li><a href="/calculateurs/intensite-moteur-triphase/">Calculer l’intensité d’un moteur triphasé</a></li><li><a href="/glossaire/">Glossaire</a></li></ul>"""
     url = SITE + "/habilitation-electrique/"
     ld = [ORG, {"@type": "TechArticle", "headline": "Habilitation électrique : tous les symboles expliqués, par thème", "url": url, "inLanguage": "fr",
                 "author": {"@type": "Person", "name": "Abourare Sahali"}, "publisher": {"@id": SITE + "/#org"}, "datePublished": "2026-11-24", "dateModified": "2026-11-24", "image": SITE + "/og-image.png"},
           {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},
           crumbs([("Accueil", "/"), ("Méthodes", "/methodes/"), ("Habilitations électriques", "/habilitation-electrique/")])]
+
+    BY = {x["slug"]: x for x in SYMBOLES}
+    for x in SYMBOLES:
+        u = f"/habilitation-electrique/{x['slug']}/"
+        short = x["sym"] if len(x["sym"]) < 30 else x["sym"].split(" / ")[0] + "…"
+        li = lambda L: "".join(f"<li>{i}</li>" for i in L)
+        vois = "".join(f'<li><a href="/habilitation-electrique/{v}/">Habilitation {BY[v]["sym"]}</a> — {BY[v]["nom"]}</li>' for v in x["voisins"])
+        faqh = "".join(f"<h3>{q}</h3><p>{a}</p>" for q, a in x["faq"])
+        sb = f"""<p class="muted"><a href="/">Accueil</a> › <a href="/habilitation-electrique/">Habilitations électriques</a> › {short}</p>
+<h1>Habilitation électrique {x["sym"]}</h1>
+<p class="muted">{x["nom"]}</p>
+<p>{x["resume"]}</p>
+<h2>Pour qui ?</h2><ul>{li(x["qui"])}</ul>
+<h2>Ce que {short} autorise</h2><ul>{li(x["oui"])}</ul>
+<h2>Ce que {short} n’autorise pas</h2><ul>{li(x["non"])}</ul>
+<h2>Exemple sur le terrain</h2><div class="card cas">{x["exemple"]}</div>
+<h2>Formation et recyclage</h2><div class="tw"><table><tbody><tr><td>Formation initiale</td><td>{x["form"][0]}</td></tr><tr><td>Recyclage recommandé</td><td>{x["form"][1]}</td></tr><tr><td>Qui délivre le titre</td><td>L’employeur, après la formation et l’avis du formateur</td></tr></tbody></table></div>
+<p class="muted">Durées couramment pratiquées par les organismes ; la norme ne donne que des valeurs recommandées.</p>
+<h2 id="quiz">Questionnaire {short} : testez-vous ({len(QZ[x["slug"]])} questions)</h2>
+{quiz_html(QZ[x["slug"]])}
+<h2>Questions fréquentes</h2>{faqh}
+<div class="card">Les autres symboles : <a href="/habilitation-electrique/">la liste complète par thème</a> et <a href="/habilitation-electrique/#quiz">le questionnaire général de 12 questions</a>.</div>
+<h2>Symboles proches</h2><ul>{vois}</ul>
+<p class="muted">Page d’information. Seuls la norme NF C 18-510 (NF C 18-550 pour les véhicules), votre formation et le titre délivré par votre employeur font foi.</p>"""
+        sld = [ORG, {"@type": "TechArticle", "headline": f"Habilitation électrique {x['sym']}", "description": x["resume"], "url": SITE + u, "inLanguage": "fr",
+                    "author": {"@type": "Person", "name": "Abourare Sahali"}, "publisher": {"@id": SITE + "/#org"}, "datePublished": "2026-11-24", "dateModified": "2026-11-24", "image": SITE + "/og-image.png"},
+              {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in x["faq"]]},
+              crumbs([("Accueil", "/"), ("Habilitations électriques", "/habilitation-electrique/"), (short, u)])]
+        page(u, f"Habilitation électrique {short} : rôle, limites, formation et quiz corrigé — MaintenanceIQ", x["resume"] + " Avec un questionnaire corrigé.", sb, sld, og_type="article")
     page("/habilitation-electrique/", "Habilitation électrique : tous les symboles (B0, BR, BS, BC, B1V, B2V, H0V, BP, B0L…) + quiz — MaintenanceIQ",
          "Tous les symboles d’habilitation électrique NF C 18-510 et NF C 18-550 rangés par thème, avec un questionnaire de 12 questions et les réponses.", body, ld, og_type="article")
 _hab()
@@ -762,7 +802,7 @@ _hab()
 urls = [("/", TODAY)] + [(f"/{t}/", TODAY) for t in ["mayotte","la-reunion","guadeloupe","martinique","guyane"]] + \
        [("/fiches/", TODAY)] + [(f"/fiches/{f['slug']}/", TODAY) for f in FICHES] + \
        [("/methodes/", TODAY)] + [(f"/methodes/{m['slug']}/", TODAY) for m in METHODES] + \
-       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY), ("/habilitation-electrique/", TODAY)] + \
+       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY), ("/habilitation-electrique/", TODAY)] + [(f"/habilitation-electrique/{x['slug']}/", TODAY) for x in SYMBOLES] + \
        [(f"/calculateurs/{c['slug']}/", TODAY) for c in CALCS] + [(f"/modeles/{m['slug']}/", TODAY) for m in MODELES] + \
        [("/en/", TODAY), ("/en/guides/", TODAY), ("/en/methods/", TODAY), ("/en/about/", TODAY), ("/en/downtime-cost-calculator/", TODAY)] + \
        [(f"/en/guides/{g['slug']}/", TODAY) for g in GUIDES_EN] + [(f"/en/methods/{m['slug']}/", TODAY) for m in METHODS_EN] + \
@@ -778,7 +818,7 @@ L = ["# MaintenanceIQ", "",
  "- [Accueil, diagnostic gratuit et offres](https://www.maintenanceiq.fr/)", "- [Fiches terrain](https://www.maintenanceiq.fr/fiches/)", "- [Méthodes de maintenance](https://www.maintenanceiq.fr/methodes/)",
  "- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)", "- [Glossaire](https://www.maintenanceiq.fr/glossaire/)", "- [À propos](https://www.maintenanceiq.fr/a-propos/)", "",
  "## English", "- [Home and plans](https://www.maintenanceiq.fr/en/)", "- [Troubleshooting guides](https://www.maintenanceiq.fr/en/guides/)", "- [Maintenance methods](https://www.maintenanceiq.fr/en/methods/)", "- [Downtime cost calculator](https://www.maintenanceiq.fr/en/downtime-cost-calculator/)", "- [About](https://www.maintenanceiq.fr/en/about/)", ""]
-L += ["## Habilitations électriques (FR)", f"- [Tous les symboles d'habilitation électrique par thème, avec quiz]({SITE}/habilitation-electrique/)", ""]
+L += ["## Habilitations électriques (FR)", f"- [Tous les symboles d'habilitation électrique par thème, avec quiz]({SITE}/habilitation-electrique/)"] + [f"- [Habilitation électrique {x['sym']}]({SITE}/habilitation-electrique/{x['slug']}/): {x['resume']}" for x in SYMBOLES] + [""]
 L += ["## Outils gratuits (FR)"] + [f"- [{c['title']}]({SITE}/calculateurs/{c['slug']}/): {c['desc']}" for c in CALCS] + [f"- [{m['title']}]({SITE}/modeles/{m['slug']}/): {m['desc']}" for m in MODELES] + [""]
 L += ["## Fiches terrain (FR)"] + [f"- [{f['title']}]({SITE}/fiches/{f['slug']}/): {f['desc']}" for f in FICHES] + [""]
 L += ["## Méthodes (FR)"] + [f"- [{m['title']}]({SITE}/methodes/{m['slug']}/): {m['desc']}" for m in METHODES] + [""]
