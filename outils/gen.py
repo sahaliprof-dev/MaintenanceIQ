@@ -55,7 +55,7 @@ ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/ad
 FOOT = ('<footer><div class="wrap">© 2026 MaintenanceIQ — SAHALI, Bourg-en-Bresse.\n'
         '<nav><a href="/">Diagnostic gratuit</a><a href="/fiches/">Fiches terrain</a><a href="/methodes/">Méthodes</a><a href="/calculateurs/">Outils gratuits</a><a href="/habilitation-electrique/">Habilitation électrique</a><a href="/glossaire/">Glossaire</a><a href="/a-propos/">À propos</a>'
         '<a href="/mentions-legales/">Mentions légales</a><a href="/cgv/">Conditions de vente</a>'
-        '<a href="/confidentialite/">Confidentialité</a><a href="mailto:sahali.prof@gmail.com">Contact</a></nav>'
+        '<a href="/confidentialite/">Confidentialité</a><a href="/carnet-idees/">Carnet d’idées</a><a href="mailto:sahali.prof@gmail.com">Contact</a></nav>'
         '<nav><a href="/mayotte/">Mayotte</a><a href="/la-reunion/">La Réunion</a><a href="/guadeloupe/">Guadeloupe</a>'
         '<a href="/martinique/">Martinique</a><a href="/guyane/">Guyane</a><a href="/en/" hreflang="en">English</a></nav></div></footer>')
 FOOT_EN = ('<footer><div class="wrap">© 2026 MaintenanceIQ — SAHALI, France.\n'
@@ -88,6 +88,9 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
         foot = FOOT
         loc = "fr_FR"
         switch = f'<a class="back" href="{alt}" hreflang="en" style="margin-left:14px">EN</a>' if alt else '<a class="back" href="/en/" hreflang="en" style="margin-left:14px">EN</a>'
+    if lang == "fr" and not path.startswith("/carnet-idees/"):
+        body += (f'<p class="muted noprint idee">Une idée pour améliorer cette page, une erreur, une fiche qui manque ? '
+                 f'<a href="/carnet-idees/?page={urllib.parse.quote(path)}#ecrire">Écrivez-la dans le carnet d’idées</a> : il est à vous.</p>')
     if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/", "/calculateurs/", "/habilitation-electrique/", "/qcm-habilitation-electrique/") or path.startswith("/habilitation-electrique/") or path.startswith("/calculateurs/") or path.startswith("/modeles/")):
         body += NL_CARD
     if og_type == "article":
@@ -922,11 +925,58 @@ try{var h=JSON.parse(localStorage.getItem("miq_qcm")||"[]");if(h.length){var l=h
     return len(bank)
 NB_QCM = _qcm()
 
+# ---------- Carnet d'idées des visiteurs ----------
+# Idées publiées (avec accord) : (date, prénom ou "Un visiteur", idée, ce qui a été fait ou "À l’étude")
+IDEES_PUBLIEES = []
+def _carnet():
+    pub = ("".join(f'<div class="card"><p class="muted" style="margin:0">{d} · {n}</p><p style="margin:6px 0"><strong>« {i} »</strong></p><p class="muted" style="margin:0">Suite donnée : {r}</p></div>' for d, n, i, r in IDEES_PUBLIEES)
+           or '<p class="muted">Les premières idées publiées apparaîtront ici, avec ce que nous en avons fait. Le carnet vient d’ouvrir : la vôtre peut être la première.</p>')
+    sel = "".join(f'<option>{o}</option>' for o in ["Une idée d’amélioration","Une erreur à corriger","Une fiche ou un sujet qui manque","Un outil ou un calculateur à ajouter","Une question","Autre"])
+    st = 'style="width:100%;margin-top:4px;padding:10px;font:500 16px var(--body);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)"'
+    body = f"""<p class="muted"><a href="/">Accueil</a> › Carnet d’idées</p>
+<h1>Le carnet d’idées : cet espace est à vous</h1>
+<p>MaintenanceIQ est fait pour les techniciens, les responsables de maintenance et tous ceux qui dépannent. Vous voyez une erreur, une fiche qui manque, un outil qui vous ferait gagner du temps, une explication pas assez claire ? Écrivez-le ici. Chaque note est lue, et les idées retenues font évoluer le site.</p>
+<div class="card"><strong>Comment ça marche</strong><ol style="margin:8px 0 0"><li>Vous écrivez votre note, en deux lignes ou en vingt.</li><li>Elle est lue sous 48 heures environ.</li><li>Si elle améliore le site, elle est appliquée, et publiée ci-dessous si vous êtes d’accord.</li><li>Si vous laissez votre e-mail, vous recevez une réponse.</li></ol></div>
+<h2 id="ecrire">Écrire une note</h2>
+<form class="card" id="carnet" action="https://formsubmit.co/sahali.prof@gmail.com" method="POST" style="display:grid;gap:12px">
+<input type="hidden" name="_subject" value="Carnet d’idées MaintenanceIQ : nouvelle note">
+<input type="hidden" name="_next" value="{SITE}/carnet-idees/merci/">
+<input type="hidden" name="_template" value="table">
+<input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+<label>Type de note<br><select name="type" {st}>{sel}</select></label>
+<label>Page concernée (facultatif)<br><input type="text" name="page" id="cpage" placeholder="Ex. : fiche pompe, page QCM…" {st}></label>
+<label>Votre note<br><textarea name="note" required minlength="10" rows="6" placeholder="Votre idée, l’erreur repérée, la fiche que vous aimeriez lire…" {st}></textarea></label>
+<label>Votre prénom ou métier (facultatif)<br><input type="text" name="prenom" maxlength="60" placeholder="Ex. : Karim, technicien de maintenance" {st}></label>
+<label>Votre e-mail pour recevoir une réponse (facultatif)<br><input type="email" name="email" placeholder="vous@exemple.fr" {st}></label>
+<label style="display:flex;gap:10px;align-items:flex-start;font-weight:400"><input type="checkbox" name="publication" value="Oui, publication autorisée" style="margin-top:4px;width:22px;height:22px;flex:0 0 22px;padding:0"><span>J’accepte que ma note soit publiée sur cette page (avec mon prénom ou métier, jamais mon e-mail).</span></label>
+<button class="btn" type="submit" style="border:0;cursor:pointer;font-size:17px">Envoyer ma note</button>
+<p class="muted" style="margin:0">Vos données servent uniquement à lire et à répondre à votre note. Voir la <a href="/confidentialite/">politique de confidentialité</a>.</p>
+</form>
+<p>Vous préférez WhatsApp ? <a href="https://wa.me/33698711848?text=Une%20id%C3%A9e%20pour%20MaintenanceIQ%20%3A%20" target="_blank" rel="noopener">Envoyez votre note par WhatsApp</a>.</p>
+<h2>Les idées des visiteurs</h2>
+{pub}
+<h2>Ce qui est déjà prévu</h2>
+<ul><li>Remplacer les cas types des fiches par des cas réels envoyés par des techniciens, avec photos.</li><li>Traduire en anglais les nouvelles fiches et outils.</li><li>Ajouter des calculateurs et des modèles à imprimer.</li></ul>
+<p class="muted">Votre idée est déjà dans cette liste ? Dites-le quand même : les demandes les plus fréquentes passent en premier.</p>
+<script>(function(){{try{{var p=new URLSearchParams(location.search).get("page");if(p)document.getElementById("cpage").value="https://www.maintenanceiq.fr"+p}}catch(e){{}}}})()</script>"""
+    page("/carnet-idees/", "Carnet d’idées : améliorez MaintenanceIQ avec nous — MaintenanceIQ",
+         "Une erreur, une fiche qui manque, un outil utile ? Le carnet d’idées est l’espace des visiteurs pour améliorer MaintenanceIQ. Chaque note est lue.", body,
+         [ORG, {"@type": "WebPage", "name": "Carnet d’idées", "url": SITE + "/carnet-idees/", "inLanguage": "fr"}, crumbs([("Accueil", "/"), ("Carnet d’idées", "/carnet-idees/")])])
+    mb = """<h1>Merci, votre note est bien arrivée</h1>
+<p>Elle sera lue sous 48 heures environ. Si vous avez laissé votre e-mail, vous recevrez une réponse.</p>
+<p><a class="btn" href="/carnet-idees/">Retour au carnet d’idées</a></p>
+<p>En attendant : <a href="/fiches/">les 50 fiches terrain</a> · <a href="/qcm-habilitation-electrique/">le QCM habilitation électrique</a> · <a href="/calculateurs/">les outils gratuits</a></p>"""
+    page("/carnet-idees/merci/", "Merci pour votre note — MaintenanceIQ", "Votre note a bien été envoyée au carnet d’idées MaintenanceIQ.", mb, [ORG])
+    fm = os.path.join(ROOT, "carnet-idees/merci/index.html"); h = open(fm).read()
+    if 'name="robots"' not in h:
+        open(fm, "w").write(h.replace("<head>", '<head><meta name="robots" content="noindex">', 1))
+_carnet()
+
 # ---------- sitemap et llms.txt ----------
 urls = [("/", TODAY)] + [(f"/{t}/", TODAY) for t in ["mayotte","la-reunion","guadeloupe","martinique","guyane"]] + \
        [("/fiches/", TODAY)] + [(f"/fiches/{f['slug']}/", TODAY) for f in FICHES] + \
        [("/methodes/", TODAY)] + [(f"/methodes/{m['slug']}/", TODAY) for m in METHODES] + \
-       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY), ("/habilitation-electrique/", TODAY), ("/qcm-habilitation-electrique/", TODAY), ("/qcm-habilitation-electrique/integrer/", TODAY)] + [(f"/habilitation-electrique/{x['slug']}/", TODAY) for x in SYMBOLES] + \
+       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY), ("/carnet-idees/", TODAY), ("/habilitation-electrique/", TODAY), ("/qcm-habilitation-electrique/", TODAY), ("/qcm-habilitation-electrique/integrer/", TODAY)] + [(f"/habilitation-electrique/{x['slug']}/", TODAY) for x in SYMBOLES] + \
        [(f"/calculateurs/{c['slug']}/", TODAY) for c in CALCS] + [(f"/modeles/{m['slug']}/", TODAY) for m in MODELES] + \
        [("/en/", TODAY), ("/en/guides/", TODAY), ("/en/methods/", TODAY), ("/en/about/", TODAY), ("/en/downtime-cost-calculator/", TODAY)] + \
        [(f"/en/guides/{g['slug']}/", TODAY) for g in GUIDES_EN] + [(f"/en/methods/{m['slug']}/", TODAY) for m in METHODS_EN] + \
