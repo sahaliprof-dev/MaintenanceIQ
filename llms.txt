@@ -21,6 +21,17 @@ Contact : sahali.prof@gmail.com · WhatsApp +33 6 98 71 18 48
 - [Downtime cost calculator](https://www.maintenanceiq.fr/en/downtime-cost-calculator/)
 - [About](https://www.maintenanceiq.fr/en/about/)
 
+## Outils gratuits (FR)
+- [Calcul de l’intensité d’un moteur triphasé](https://www.maintenanceiq.fr/calculateurs/intensite-moteur-triphase/): Calculez gratuitement le courant absorbé par un moteur triphasé à partir de sa puissance, de la tension, du cos φ et du rendement. Formule et exemple.
+- [Calcul de la chute de tension dans un câble](https://www.maintenanceiq.fr/calculateurs/chute-de-tension-cable/): Calcul gratuit de la chute de tension en monophasé ou triphasé selon la longueur, la section, le courant et le cos φ, avec les limites de la NF C 15-100.
+- [Calculateur MTBF, MTTR et disponibilité](https://www.maintenanceiq.fr/calculateurs/mtbf-mttr-disponibilite/): Calculez gratuitement le MTBF, le MTTR et le taux de disponibilité d’une machine à partir de la période observée, du nombre de pannes et du temps d’arrêt.
+- [Quantité de graisse pour un roulement](https://www.maintenanceiq.fr/calculateurs/quantite-graisse-roulement/): Calculez gratuitement la quantité de graisse de regraissage d’un roulement à partir de ses dimensions, et l’effet de la température sur l’intervalle de regraissage.
+- [Calculateur de criticité AMDEC](https://www.maintenanceiq.fr/calculateurs/criticite-amdec/): Calculez gratuitement la criticité d’une défaillance en AMDEC : gravité × occurrence × détection, avec une aide pour prioriser les actions.
+- [Flèche de contrôle d’une courroie](https://www.maintenanceiq.fr/calculateurs/fleche-courroie/): Calculez la flèche à mesurer au milieu de l’entraxe pour contrôler la tension d’une courroie trapézoïdale, avec la méthode pas à pas.
+- [Convertisseur de pression bar, psi, kPa, mCE](https://www.maintenanceiq.fr/calculateurs/convertisseur-pression/): Convertisseur gratuit de pression entre bar, psi, kPa, MPa et mètres de colonne d’eau, pour lire un manomètre ou une notice étrangère.
+- [Check-list de ronde de maintenance à imprimer](https://www.maintenanceiq.fr/modeles/check-list-ronde/): Modèle gratuit de check-list de ronde hebdomadaire pour pompes, moteurs, compresseurs et armoires : bruit, vibration, température, fuites, niveaux.
+- [Fiche d’intervention de maintenance à imprimer](https://www.maintenanceiq.fr/modeles/fiche-intervention/): Modèle gratuit de fiche d’intervention : symptôme, cause, travaux réalisés, pièces, temps d’arrêt, consignation. Pour garder l’historique de chaque machine.
+
 ## Fiches terrain (FR)
 - [Pompe qui fait un bruit de gravier : la cavitation](https://www.maintenanceiq.fr/fiches/cavitation-pompe/): Bruit de gravier, vibration, baisse de débit : comment reconnaître la cavitation d’une pompe centrifuge, quoi vérifier et que faire avant la casse.
 - [Fuite à la garniture mécanique d’une pompe](https://www.maintenanceiq.fr/fiches/pompe-garniture-mecanique-fuit/): Une garniture mécanique ne doit pas goutter en continu. Causes d’une fuite (marche à sec, usure, particules), vérifications et actions pour éviter l’arrêt.

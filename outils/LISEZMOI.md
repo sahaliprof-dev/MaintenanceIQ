@@ -19,3 +19,4 @@ Ajouts du 23/11/2026 (gérés par `gen.py`, ne pas retirer) :
 - Bloc « Partager cette fiche » (WhatsApp, LinkedIn, Facebook, e-mail, copier le lien) en bas des fiches, méthodes et guides.
 - Flux RSS : `/feed.xml` (FR) et `/en/feed.xml` (EN).
 - IndexNow : `.github/workflows/indexnow.yml` prévient Bing et les autres moteurs à chaque mise en ligne ; la clé est le fichier `<clé>.txt` à la racine (ne pas supprimer).
+- Outils gratuits : `calcs_fr.py` (calculateurs `/calculateurs/…` et modèles à imprimer `/modeles/…`). Schémas et repères chiffrés des fiches : `schemas_fr.py`. Images d'aperçu : `/og/` (générées).

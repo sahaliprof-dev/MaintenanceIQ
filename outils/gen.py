@@ -4,6 +4,7 @@ from fiches_data import FICHES, FICHES_BY_SLUG
 import contenu_fr_plus
 from contenu_fr_plus import METHODES
 from schemas_fr import SCHEMAS
+from calcs_fr import CALCS, MODELES
 from PIL import Image, ImageDraw, ImageFont
 _F = "/usr/share/fonts/opentype/inter/"
 def make_og(name, kicker, title):
@@ -46,7 +47,7 @@ TODAY = "2026-11-22"
 ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6829528595387726" crossorigin="anonymous"></script>\n'
 
 FOOT = ('<footer><div class="wrap">© 2026 MaintenanceIQ — SAHALI, Bourg-en-Bresse.\n'
-        '<nav><a href="/">Diagnostic gratuit</a><a href="/fiches/">Fiches terrain</a><a href="/methodes/">Méthodes</a><a href="/calculateur-cout-panne/">Coût d’une panne</a><a href="/glossaire/">Glossaire</a><a href="/a-propos/">À propos</a>'
+        '<nav><a href="/">Diagnostic gratuit</a><a href="/fiches/">Fiches terrain</a><a href="/methodes/">Méthodes</a><a href="/calculateurs/">Outils gratuits</a><a href="/glossaire/">Glossaire</a><a href="/a-propos/">À propos</a>'
         '<a href="/mentions-legales/">Mentions légales</a><a href="/cgv/">Conditions de vente</a>'
         '<a href="/confidentialite/">Confidentialité</a><a href="mailto:sahali.prof@gmail.com">Contact</a></nav>'
         '<nav><a href="/mayotte/">Mayotte</a><a href="/la-reunion/">La Réunion</a><a href="/guadeloupe/">Guadeloupe</a>'
@@ -81,7 +82,7 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
         foot = FOOT
         loc = "fr_FR"
         switch = f'<a class="back" href="{alt}" hreflang="en" style="margin-left:14px">EN</a>' if alt else '<a class="back" href="/en/" hreflang="en" style="margin-left:14px">EN</a>'
-    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/")):
+    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/", "/calculateurs/") or path.startswith("/calculateurs/") or path.startswith("/modeles/")):
         body += NL_CARD
     if og_type == "article":
         q = urllib.parse.quote(url, safe="")
@@ -639,11 +640,69 @@ rss("/feed.xml", "MaintenanceIQ — fiches terrain et méthodes", "Dépannage et
 rss("/en/feed.xml", "MaintenanceIQ — troubleshooting guides and methods", "Practical maintenance troubleshooting and methods.", "en",
     [(g["h1"], f"/en/guides/{g['slug']}/", g["desc"], g.get("date", FICHES_BY_SLUG.get(g["fr"], {}).get("date", "2026-11-22"))) for g in GUIDES_EN] + [(m["h1"], f"/en/methods/{m['slug']}/", m["desc"], m.get("date", "2026-11-22")) for m in METHODS_EN])
 
+# ---------- Calculateurs et modèles à imprimer ----------
+import html as _html
+def field_html(fd):
+    if isinstance(fd[2], list):
+        opts = "".join(f'<option value="{a}">{b}</option>' for a, b in fd[2])
+        return f'<label>{fd[1]}<br><select id="{fd[0]}" style="width:100%;margin-top:4px;padding:10px;font:500 17px var(--body);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)">{opts}</select></label>'
+    return f'<label>{fd[1]}<br><input id="{fd[0]}" type="number" inputmode="decimal" step="{fd[3]}" value="{fd[2]}"></label>'
+for c in CALCS:
+    ids = [fd[0] for fd in c["fields"]]
+    js = ('<script>(function(){var ids=' + json.dumps(ids) + ';var f=function(n,d){return new Intl.NumberFormat("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:0}).format(n)};'
+          'function run(){var v={};ids.forEach(function(i){var x=parseFloat(String(document.getElementById(i).value).replace(",","."));v[i]=isNaN(x)?0:x});'
+          'var out;try{out=(function(v,f){' + c["js"] + '})(v,f)}catch(e){out="Vérifiez les valeurs saisies."}document.getElementById("out").innerHTML=out}'
+          'ids.forEach(function(i){var el=document.getElementById(i);el.addEventListener("input",run);el.addEventListener("change",run)});run()})()</script>')
+    others = "".join(f'<li><a href="/calculateurs/{o["slug"]}/">{o["h1"]}</a></li>' for o in CALCS if o["slug"] != c["slug"])
+    faq_html = "".join(f"<h3>{q}</h3><p>{a}</p>" for q, a in c["faq"])
+    body = f"""<p class="muted"><a href="/">Accueil</a> › <a href="/calculateurs/">Outils gratuits</a></p>
+<h1>{c["h1"]}</h1>
+<p>{c["intro"]}</p>
+<form class="card" onsubmit="return false" style="display:grid;gap:12px">{"".join(field_html(fd) for fd in c["fields"])}</form>
+<div class="card" id="out" aria-live="polite"></div>
+<h2>La formule</h2><p class="formule">{c["formule"]}</p>
+<h2>Exemple chiffré</h2><p>{c["exemple"]}</p>
+<h2>Questions fréquentes</h2>{faq_html}
+<p class="muted">Résultat indicatif, calculé sur votre téléphone : rien n’est envoyé. La notice du constructeur et les règles de votre site passent avant.</p>
+<h2>Autres outils gratuits</h2><ul>{others}<li><a href="/calculateur-cout-panne/">Calculer le coût d’une panne</a></li></ul>{js}"""
+    url = SITE + f"/calculateurs/{c['slug']}/"
+    ld = [ORG, {"@type": "WebApplication", "name": c["title"], "url": url, "applicationCategory": "UtilitiesApplication", "operatingSystem": "Tous", "inLanguage": "fr",
+                "isAccessibleForFree": True, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "publisher": {"@id": SITE + "/#org"}},
+          {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in c["faq"]]},
+          crumbs([("Accueil", "/"), ("Outils gratuits", "/calculateurs/"), (c["title"], f"/calculateurs/{c['slug']}/")])]
+    page(f"/calculateurs/{c['slug']}/", f'{c["title"]} — MaintenanceIQ', c["desc"], body, ld)
+
+for m in MODELES:
+    head = "".join(f"<th>{h}</th>" for h in m["head"])
+    rows = "".join("<tr>" + "".join(f"<td>{x}</td>" for x in r) + "".join("<td>&nbsp;</td>" for _ in range(len(m["head"]) - len(r))) + "</tr>" for r in m["rows"])
+    body = f"""<p class="muted noprint"><a href="/">Accueil</a> › <a href="/calculateurs/">Outils gratuits</a></p>
+<h1>{m["h1"]}</h1>
+<p class="noprint">{m["intro"]}</p>
+<p class="noprint"><button class="btn" onclick="window.print()" style="border:0;cursor:pointer;font-size:17px">Imprimer ou enregistrer en PDF</button></p>
+<p class="printonly">Machine : ............................................ Semaine / date : ....................... Nom : ...........................</p>
+<div class="tw"><table class="modele"><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>
+<p class="muted">Modèle gratuit MaintenanceIQ · maintenanceiq.fr · Sécurité : aucune intervention sans consignation.</p>"""
+    url = SITE + f"/modeles/{m['slug']}/"
+    ld = [ORG, {"@type": "DigitalDocument", "name": m["title"], "url": url, "inLanguage": "fr", "isAccessibleForFree": True, "publisher": {"@id": SITE + "/#org"}},
+          crumbs([("Accueil", "/"), ("Outils gratuits", "/calculateurs/"), (m["title"], f"/modeles/{m['slug']}/")])]
+    page(f"/modeles/{m['slug']}/", f'{m["title"]} — MaintenanceIQ', m["desc"], body, ld)
+
+hub = ('<p class="muted"><a href="/">Accueil</a> › Outils gratuits</p><h1>Outils gratuits pour la maintenance</h1>'
+       '<p>Des calculateurs qui font une seule chose, avec leur formule et un exemple chiffré, et des modèles à imprimer. Gratuits, sans inscription : tout se calcule sur votre téléphone.</p>'
+       '<h2>Calculateurs</h2><ul><li><a href="/calculateur-cout-panne/"><strong>Calculer le coût d’une panne</strong></a><br><span class="muted">Production perdue, main-d’œuvre, pièces en urgence : ce que coûte vraiment un arrêt.</span></li>'
+       + "".join(f'<li><a href="/calculateurs/{c["slug"]}/"><strong>{c["h1"]}</strong></a><br><span class="muted">{c["desc"]}</span></li>' for c in CALCS) + '</ul>'
+       '<h2>Modèles à imprimer</h2><ul>' + "".join(f'<li><a href="/modeles/{m["slug"]}/"><strong>{m["h1"]}</strong></a><br><span class="muted">{m["desc"]}</span></li>' for m in MODELES) + '</ul>'
+       '<div class="card">Un outil vous manque ? Écrivez-nous sur <a href="https://wa.me/33698711848">WhatsApp</a> : les demandes les plus fréquentes sont ajoutées en priorité.</div>')
+page("/calculateurs/", "Outils gratuits de maintenance : calculateurs et modèles — MaintenanceIQ",
+     "Calculateurs gratuits de maintenance (intensité moteur, chute de tension, MTBF, graissage, AMDEC, courroie, pression) et modèles à imprimer.", hub,
+     [ORG, {"@type": "CollectionPage", "name": "Outils gratuits de maintenance", "url": SITE + "/calculateurs/", "inLanguage": "fr"}, crumbs([("Accueil", "/"), ("Outils gratuits", "/calculateurs/")])])
+
 # ---------- sitemap et llms.txt ----------
 urls = [("/", TODAY)] + [(f"/{t}/", TODAY) for t in ["mayotte","la-reunion","guadeloupe","martinique","guyane"]] + \
        [("/fiches/", TODAY)] + [(f"/fiches/{f['slug']}/", TODAY) for f in FICHES] + \
        [("/methodes/", TODAY)] + [(f"/methodes/{m['slug']}/", TODAY) for m in METHODES] + \
-       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY)] + \
+       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY)] + \
+       [(f"/calculateurs/{c['slug']}/", TODAY) for c in CALCS] + [(f"/modeles/{m['slug']}/", TODAY) for m in MODELES] + \
        [("/en/", TODAY), ("/en/guides/", TODAY), ("/en/methods/", TODAY), ("/en/about/", TODAY), ("/en/downtime-cost-calculator/", TODAY)] + \
        [(f"/en/guides/{g['slug']}/", TODAY) for g in GUIDES_EN] + [(f"/en/methods/{m['slug']}/", TODAY) for m in METHODS_EN] + \
        [("/cgv/", "2026-11-20"), ("/mentions-legales/", "2026-11-20"), ("/confidentialite/", "2026-11-14")]
@@ -658,6 +717,7 @@ L = ["# MaintenanceIQ", "",
  "- [Accueil, diagnostic gratuit et offres](https://www.maintenanceiq.fr/)", "- [Fiches terrain](https://www.maintenanceiq.fr/fiches/)", "- [Méthodes de maintenance](https://www.maintenanceiq.fr/methodes/)",
  "- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)", "- [Glossaire](https://www.maintenanceiq.fr/glossaire/)", "- [À propos](https://www.maintenanceiq.fr/a-propos/)", "",
  "## English", "- [Home and plans](https://www.maintenanceiq.fr/en/)", "- [Troubleshooting guides](https://www.maintenanceiq.fr/en/guides/)", "- [Maintenance methods](https://www.maintenanceiq.fr/en/methods/)", "- [Downtime cost calculator](https://www.maintenanceiq.fr/en/downtime-cost-calculator/)", "- [About](https://www.maintenanceiq.fr/en/about/)", ""]
+L += ["## Outils gratuits (FR)"] + [f"- [{c['title']}]({SITE}/calculateurs/{c['slug']}/): {c['desc']}" for c in CALCS] + [f"- [{m['title']}]({SITE}/modeles/{m['slug']}/): {m['desc']}" for m in MODELES] + [""]
 L += ["## Fiches terrain (FR)"] + [f"- [{f['title']}]({SITE}/fiches/{f['slug']}/): {f['desc']}" for f in FICHES] + [""]
 L += ["## Méthodes (FR)"] + [f"- [{m['title']}]({SITE}/methodes/{m['slug']}/): {m['desc']}" for m in METHODES] + [""]
 L += ["## Guides (EN)"] + [f"- [{g['title']}]({SITE}/en/guides/{g['slug']}/): {g['desc']}" for g in GUIDES_EN] + [f"- [{m['title']}]({SITE}/en/methods/{m['slug']}/): {m['desc']}" for m in METHODS_EN] + [""]
