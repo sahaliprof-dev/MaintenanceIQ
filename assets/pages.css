@@ -37,3 +37,4 @@ h3{font:700 21px/1.2 var(--body);margin:22px 0 6px}
 .res{font-size:20px;margin:0 0 6px}.formule{font:600 16px/1.5 ui-monospace,Menlo,Consolas,monospace;background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:12px}
 .printonly{display:none}.modele td{height:34px;border:1px solid var(--line);padding:6px}.modele th{border:1px solid var(--line);padding:6px}
 @media print{.top,footer,.card,.noprint,ins,iframe{display:none!important}.printonly{display:block}body{background:#fff;font-size:12px}main{padding:0}}
+.cas{border-left:4px solid #3FA66A}

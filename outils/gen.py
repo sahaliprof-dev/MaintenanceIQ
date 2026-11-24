@@ -3,7 +3,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fiches_data import FICHES, FICHES_BY_SLUG
 import contenu_fr_plus
 from contenu_fr_plus import METHODES
-from schemas_fr import SCHEMAS
+from schemas_fr import SCHEMAS, CAS
 from calcs_fr import CALCS, MODELES
 from PIL import Image, ImageDraw, ImageFont
 _F = "/usr/share/fonts/opentype/inter/"
@@ -296,6 +296,13 @@ def fr_date(d):
     y, m, j = d.split("-"); return f"{int(j)} {MONTHS[int(m)-1]} {y}"
 EXTRAIT = "/ebook/extrait-diagnostiquer-avant-la-panne.pdf"
 
+def cas_block(slug):
+    c = CAS.get(slug)
+    if not c: return ""
+    figs = "".join(f'<figure class="schema"><img src="{src}" alt="{alt}" width="800" height="1059" loading="lazy" style="width:100%;height:auto;border-radius:4px"><figcaption>{cap}</figcaption></figure>' for src, alt, cap in c["photos"])
+    return (f'<div class="card cas"><h2 style="margin-top:0">{c["titre"]}</h2><p class="muted">Témoignage de <a href="/a-propos/">SAHALI</a>, auteur de MaintenanceIQ, photos prises par l’auteur.</p>'
+            + "".join(f"<p>{t}</p>" for t in c["texte"]) + figs + f'<p><strong>Ce qu’il faut en retenir.</strong> {c["lecon"]}</p></div>\n')
+
 def schema_block(slug):
     sc = SCHEMAS.get(slug)
     if not sc: return ""
@@ -316,7 +323,7 @@ for f in FICHES:
 <ul>{"".join(f"<li>{x}</li>" for x in f["signes"])}</ul>
 <h2>Causes probables et comment les vérifier</h2>
 <div class="tw"><table><thead><tr><th>Cause probable</th><th>Comment vérifier</th></tr></thead><tbody>{causes}</tbody></table></div>
-{schema_block(f["slug"])}<h2>Que faire</h2>
+{schema_block(f["slug"])}{cas_block(f["slug"])}<h2>Que faire</h2>
 <ol>{"".join(f"<li>{x}</li>" for x in f["faire"])}</ol>
 <div class="card"><strong>Sécurité d’abord.</strong> {f["secu"]} Les consignes de votre site et du constructeur passent toujours avant cette fiche.</div>
 <h2>Questions fréquentes</h2>

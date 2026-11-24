@@ -105,3 +105,15 @@ SCHEMAS = {
  ["Qui intervient", "Ouverture d’armoire et travaux réservés aux personnes habilitées, après consignation."],
 ]},
 }
+
+# Cas réels vécus par l'auteur (texte fidèle à son récit, photos de l'auteur).
+CAS = {
+"chauffe-eau-electrique-plus-d-eau-chaude": {
+ "titre": "Cas réel : mon ballon s’était mis en sécurité",
+ "texte": ["Chez moi, le ballon d’eau chaude ne donnait plus d’eau chaude, alors que le courant arrivait bien jusqu’à l’appareil : ce n’était donc pas un problème de disjoncteur.",
+           "Je suis resté une semaine sans eau chaude. Une première intervention a remis le ballon en marche, puis le problème est revenu. Comme j’avais assisté à la première intervention, j’ai pu réparer moi-même la seconde fois.",
+           "Cause probable : le tartre accumulé dans la cuve."],
+ "lecon": "Quand la sécurité coupe de nouveau après une remise en marche, la cause est toujours là : tartre sur la résistance, thermostat défaillant ou réglé trop haut. Détartrer la cuve et faire contrôler la résistance et le thermostat évite que ça recommence. Toute intervention se fait ballon hors tension, par une personne habilitée.",
+ "photos": [("/images/cas/thermostat-chauffe-eau-securite-1.jpg", "Thermostat Cotherm d’un chauffe-eau électrique, capot retiré, avec son bouton rouge de réarmement de sécurité", "Le thermostat de mon ballon, capot retiré. Le petit bouton rouge marqué « Safety » est le réarmement de la sécurité."),
+            ("/images/cas/thermostat-chauffe-eau-securite-2.jpg", "Le même thermostat de chauffe-eau vu de plus près", "Le même thermostat, vu de plus près.")]},
+}
