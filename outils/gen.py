@@ -6,8 +6,7 @@ from contenu_fr_plus import METHODES
 from schemas_fr import SCHEMAS, CAS
 from calcs_fr import CALCS, MODELES
 from habilitations_fr import THEMES, LECTURE, QUIZ
-from symboles_fr import SYMBOLES
-from quiz_symboles_fr import QZ
+from symboles_fr import SYMBOLES, QZ, REDIRECTS
 from PIL import Image, ImageDraw, ImageFont
 _F = "/usr/share/fonts/opentype/inter/"
 def make_og(name, kicker, title):
@@ -724,12 +723,26 @@ def quiz_html(Q):
     return (f'<p>Touchez une réponse : la bonne s’affiche avec l’explication.</p><p class="card" id="score" aria-live="polite">Score : 0 / 0</p>{qz}'
             f'<details class="card"><summary><strong>Voir toute la correction ({len(Q)} questions)</strong></summary><ol>{corr}</ol></details>{js}')
 
+def SHORT(x):
+    return {"travaux-sous-tension": "Travaux sous tension (T, N)"}.get(x["slug"], x["sym"])
+def H1(x):
+    return {"travaux-sous-tension": "Habilitation travaux sous tension : B1T, B2T, H1T, H2T et nettoyage N"}.get(x["slug"], "Habilitation électrique " + x["sym"])
+def _redirects():
+    for old, new in REDIRECTS.items():
+        d = os.path.join(ROOT, "habilitation-electrique", old); os.makedirs(d, exist_ok=True)
+        u = f"{SITE}/habilitation-electrique/{new}/"
+        open(os.path.join(d, "index.html"), "w").write(f'<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="{u}"><meta http-equiv="refresh" content="0; url={u}"><title>Page déplacée</title></head><body><p>Cette page a déménagé : <a href="{u}">{u}</a></p></body></html>')
+_redirects()
+
 def _hab():
     import html as H
-    SLUG_OF = {"B0":"b0","B0 Chargé de chantier":"b0","H0":"h0-h0v","H0V":"h0-h0v","BF-HF":"bf-hf","B1":"b1-b1v","B1V":"b1-b1v","B2":"b2-b2v","B2V":"b2-b2v","B2V Essai":"b2-b2v",
-               "H1 / H1V":"hc-h1-h2","H2 / H2V":"hc-h1-h2","H2V Essai":"hc-h1-h2","BC":"bc","HC":"bc","BR":"br","BS":"bs","BE Manœuvre / HE Manœuvre":"be-manoeuvre",
-               "BE Mesurage / HE Mesurage":"be-specifiques","BE Vérification / HE Vérification":"be-specifiques","BE Essai / HE Essai":"be-specifiques","BP":"bp",
-               "B0L":"b0l","B1L / B1VL":"b1vl-b2vl-bcl","B2L / B2VL":"b1vl-b2vl-bcl","BCL":"b1vl-b2vl-bcl","BEL / BRL":"b1vl-b2vl-bcl","B1XL / B2XL":"b1vl-b2vl-bcl"}
+    SLUG_OF = {"B0":"b0","B0 Chargé de chantier":"b0","H0":"h0","H0V":"h0v","BF-HF":"bf-hf","B1":"b1","B1V":"b1v","B2":"b2","B2V":"b2v","B2V Essai":"b2v-essai",
+               "H1 / H1V":"h1v","H2 / H2V":"h2v","H2V Essai":"h2v","BC":"bc","HC":"hc","BR":"br","BS":"bs","BE Manœuvre / HE Manœuvre":"be-manoeuvre",
+               "BE Mesurage / HE Mesurage":"be-mesurage","BE Vérification / HE Vérification":"be-verification","BE Essai / HE Essai":"be-essai","BP":"bp",
+               "T (B1T, B2T, H1T, H2T…)":"travaux-sous-tension","N":"travaux-sous-tension",
+               "B0L":"b0l","B1L / B1VL":"b1vl","B2L / B2VL":"b2vl","BCL":"bcl","BEL / BRL":"brl","B1XL / B2XL":"b1xl-b2xl"}
+    for k, v in SLUG_OF.items():
+        assert v in {x["slug"] for x in SYMBOLES}, (k, v)
     lk = lambda s: f'<a href="/habilitation-electrique/{SLUG_OF[s]}/">{s}</a>' if s in SLUG_OF else s
     lect = "".join(f"<li><strong>{a}</strong> — {b}</li>" for a, b in LECTURE)
     toc = "".join(f'<li><a href="#t{i}">{t[0]}</a></li>' for i, t in enumerate(THEMES))
@@ -738,6 +751,10 @@ def _hab():
         tr = "".join(f"<tr><td><strong>{lk(s)}</strong></td><td>{n}</td><td>{d}</td></tr>" for s, n, d in rows)
         secs += f'<h2 id="t{i}">{titre}</h2><p>{intro}</p><div class="tw"><table><thead><tr><th>Symbole</th><th>Qui</th><th>Ce qu’il autorise</th></tr></thead><tbody>{tr}</tbody></table></div>'
     faq = [(q, opts[ok] + ". " + ex) for q, opts, ok, ex in QUIZ]
+    _gs = []
+    for x in SYMBOLES:
+        if x["groupe"] not in _gs: _gs.append(x["groupe"])
+    PAR_GROUPE = "<ul>" + "".join("<li><strong>" + g + " :</strong> " + " · ".join(f'<a href="/habilitation-electrique/{x["slug"]}/">{SHORT(x)}</a>' for x in SYMBOLES if x["groupe"] == g) + "</li>" for g in _gs) + "</ul>"
     body = f"""<p class="muted"><a href="/">Accueil</a> › <a href="/methodes/">Méthodes</a> › Habilitations électriques</p>
 <h1>Habilitation électrique : tous les symboles expliqués, par thème</h1>
 <p>B0, H0V, B1V, B2V, BR, BS, BC, BE Manœuvre, BP, BF-HF, B1L… Chaque symbole dit précisément ce qu’une personne a le droit de faire sur ou près d’une installation électrique. Voici la liste complète, rangée par thème, puis un questionnaire de 12 questions avec les réponses pour vérifier que tout est clair.</p>
@@ -745,7 +762,7 @@ def _hab():
 <h2>Comment lire un symbole</h2><ul>{lect}</ul>
 <p>Exemple : <strong>B2V Essai</strong> = basse tension (B), chargé de travaux (2), au voisinage (V), autorisé à faire des essais (attribut).</p>
 <div class="card"><strong>Examen blanc :</strong> <a href="/qcm-habilitation-electrique/">QCM habilitation électrique gratuit, questions tirées au hasard, score et correction PDF</a>.</div>
-<h2>Une page par symbole</h2><p>{" · ".join(f'<a href="/habilitation-electrique/{x["slug"]}/">{x["sym"].split(" / ")[0] if x["slug"].startswith("b1vl") else x["sym"]}</a>' for x in SYMBOLES)}</p>
+<h2>Une page par symbole</h2>{PAR_GROUPE}
 <h2>Sommaire par thème</h2><ul>{toc}<li><a href="#quiz">Questionnaire avec réponses</a></li></ul>
 {secs}
 <h2>Quel symbole pour quel métier ?</h2><div class="tw"><table><thead><tr><th>Métier</th><th>Symbole le plus courant</th></tr></thead><tbody>
@@ -770,12 +787,13 @@ def _hab():
     BY = {x["slug"]: x for x in SYMBOLES}
     for x in SYMBOLES:
         u = f"/habilitation-electrique/{x['slug']}/"
-        short = x["sym"] if len(x["sym"]) < 30 else x["sym"].split(" / ")[0] + "…"
+        short = SHORT(x)
         li = lambda L: "".join(f"<li>{i}</li>" for i in L)
-        vois = "".join(f'<li><a href="/habilitation-electrique/{v}/">Habilitation {BY[v]["sym"]}</a> — {BY[v]["nom"]}</li>' for v in x["voisins"])
+        vois = "".join(f'<li><a href="/habilitation-electrique/{v}/">Habilitation {SHORT(BY[v])}</a> — {BY[v]["nom"]}</li>' for v in x["voisins"])
+        meme = " · ".join(f'<a href="/habilitation-electrique/{y["slug"]}/">{SHORT(y)}</a>' for y in SYMBOLES if y["groupe"] == x["groupe"] and y["slug"] != x["slug"])
         faqh = "".join(f"<h3>{q}</h3><p>{a}</p>" for q, a in x["faq"])
         sb = f"""<p class="muted"><a href="/">Accueil</a> › <a href="/habilitation-electrique/">Habilitations électriques</a> › {short}</p>
-<h1>Habilitation électrique {x["sym"]}</h1>
+<h1>{H1(x)}</h1>
 <p class="muted">{x["nom"]}</p>
 <p>{x["resume"]}</p>
 <h2>Pour qui ?</h2><ul>{li(x["qui"])}</ul>
@@ -789,23 +807,28 @@ def _hab():
 <h2>Questions fréquentes</h2>{faqh}
 <div class="card"><strong>Examen blanc :</strong> <a href="/qcm-habilitation-electrique/">le QCM complet, tous symboles mélangés, avec score et correction PDF</a>. Les autres symboles : <a href="/habilitation-electrique/">la liste complète par thème</a> et <a href="/habilitation-electrique/#quiz">le questionnaire général de 12 questions</a>.</div>
 <h2>Symboles proches</h2><ul>{vois}</ul>
+{('<p><strong>Même thème (' + x["groupe"] + ') :</strong> ' + meme + '</p>') if meme else ''}
 <p class="muted">Page d’information. Seuls la norme NF C 18-510 (NF C 18-550 pour les véhicules), votre formation et le titre délivré par votre employeur font foi.</p>"""
-        sld = [ORG, {"@type": "TechArticle", "headline": f"Habilitation électrique {x['sym']}", "description": x["resume"], "url": SITE + u, "inLanguage": "fr",
+        sld = [ORG, {"@type": "TechArticle", "headline": H1(x), "description": x["resume"], "url": SITE + u, "inLanguage": "fr",
                     "author": {"@type": "Person", "name": "Abourare Sahali"}, "publisher": {"@id": SITE + "/#org"}, "datePublished": "2026-11-24", "dateModified": "2026-11-24", "image": SITE + "/og-image.png"},
               {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in x["faq"]]},
               crumbs([("Accueil", "/"), ("Habilitations électriques", "/habilitation-electrique/"), (short, u)])]
-        page(u, f"Habilitation électrique {short} : rôle, limites, formation et quiz corrigé — MaintenanceIQ", x["resume"] + " Avec un questionnaire corrigé.", sb, sld, og_type="article")
-    page("/habilitation-electrique/", "Habilitation électrique : tous les symboles (B0, BR, BS, BC, B1V, B2V, H0V, BP, B0L…) + quiz — MaintenanceIQ",
+        _t = "Habilitation travaux sous tension (T, N) : rôle, quiz" if x["slug"] == "travaux-sous-tension" else f"Habilitation {SHORT(x)} : rôle, formation et quiz"
+        page(u, f"{_t} — MaintenanceIQ", x["resume"] + " Avec un questionnaire corrigé.", sb, sld, og_type="article")
+    page("/habilitation-electrique/", "Habilitation électrique : tous les symboles par thème + quiz — MaintenanceIQ",
          "Tous les symboles d’habilitation électrique NF C 18-510 et NF C 18-550 rangés par thème, avec un questionnaire de 12 questions et les réponses.", body, ld, og_type="article")
 _hab()
 
 # ---------- QCM / examen blanc habilitation électrique ----------
 def _qcm():
-    SYM_NAME = {x["slug"]: x["sym"] for x in SYMBOLES}
+    SYM_NAME = {x["slug"]: SHORT(x) for x in SYMBOLES}
     bank = [{"t": "general", "q": q, "o": o, "a": a, "e": e} for q, o, a, e in QUIZ]
+    seen = {b["q"] for b in bank}
     for sl, L in QZ.items():
-        bank += [{"t": sl, "q": q, "o": o, "a": a, "e": e} for q, o, a, e in L]
-    opts = '<option value="all">Tous les symboles (' + str(len(bank)) + ' questions)</option>' + "".join(f'<option value="{sl}">{SYM_NAME[sl]} ({len(QZ[sl])} questions)</option>' for sl in QZ)
+        for q, o, a, e in L:
+            if q not in seen:
+                seen.add(q); bank.append({"t": sl, "q": q, "o": o, "a": a, "e": e})
+    opts = '<option value="all">Tous les symboles (' + str(len(bank)) + ' questions)</option>' + "".join(f'<option value="{sl}">{SYM_NAME[sl]} ({sum(1 for b in bank if b["t"] == sl)} questions)</option>' for sl in QZ)
     app = r'''<div id="qcm-setup" class="card" style="display:grid;gap:12px">
 <label>Thème<br><select id="qt" style="width:100%;margin-top:4px;padding:10px;font:500 17px var(--body);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)">OPTS</select></label>
 <label>Nombre de questions<br><select id="qn" style="width:100%;margin-top:4px;padding:10px;font:500 17px var(--body);border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)"><option value="10">10 questions (5 min)</option><option value="20" selected>20 questions (10 min)</option><option value="40">40 questions (20 min)</option><option value="999">Toutes les questions du thème</option></select></label>
@@ -837,7 +860,7 @@ window.scrollTo(0,$("qcm-res").offsetTop-20)};
 try{var h=JSON.parse(localStorage.getItem("miq_qcm")||"[]");if(h.length){var l=h[h.length-1];$("qcm-setup").insertAdjacentHTML("beforeend",'<p class="muted" style="margin:0">Votre dernier score sur cet appareil : '+l.s+" / "+l.n+" ("+h.length+" essai"+(h.length>1?"s":"")+").</p>")}}catch(_){}
 })()</script>'''
     app = app.replace("OPTS", opts).replace("BANK", json.dumps(bank, ensure_ascii=False)).replace("SYMS", json.dumps(SYM_NAME, ensure_ascii=False))
-    liens = " · ".join(f'<a href="/habilitation-electrique/{x["slug"]}/">{x["sym"].split(" / ")[0]}</a>' for x in SYMBOLES)
+    liens = " · ".join(f'<a href="/habilitation-electrique/{x["slug"]}/">{SHORT(x)}</a>' for x in SYMBOLES)
     body = f"""<p class="muted noprint"><a href="/">Accueil</a> › <a href="/habilitation-electrique/">Habilitations électriques</a> › QCM</p>
 <h1>QCM habilitation électrique gratuit : examen blanc corrigé</h1>
 <p class="noprint">{len(bank)} questions corrigées sur tous les symboles de la NF C 18-510 et de la NF C 18-550 : B0, H0V, BS, BE Manœuvre, BR, BC, B1V, B2V, BP, BF-HF, haute tension et véhicules électriques. Choisissez un symbole ou mélangez tout, répondez, puis obtenez votre score et la correction détaillée, à imprimer ou enregistrer en PDF.</p>
@@ -901,11 +924,16 @@ L = ["# MaintenanceIQ", "",
  "- [Accueil, diagnostic gratuit et offres](https://www.maintenanceiq.fr/)", "- [Fiches terrain](https://www.maintenanceiq.fr/fiches/)", "- [Méthodes de maintenance](https://www.maintenanceiq.fr/methodes/)",
  "- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)", "- [Glossaire](https://www.maintenanceiq.fr/glossaire/)", "- [À propos](https://www.maintenanceiq.fr/a-propos/)", "",
  "## English", "- [Home and plans](https://www.maintenanceiq.fr/en/)", "- [Troubleshooting guides](https://www.maintenanceiq.fr/en/guides/)", "- [Maintenance methods](https://www.maintenanceiq.fr/en/methods/)", "- [Downtime cost calculator](https://www.maintenanceiq.fr/en/downtime-cost-calculator/)", "- [About](https://www.maintenanceiq.fr/en/about/)", ""]
-L += ["## Habilitations électriques (FR)", f"- [Tous les symboles d'habilitation électrique par thème, avec quiz]({SITE}/habilitation-electrique/)", f"- [QCM habilitation électrique gratuit, examen blanc corrigé]({SITE}/qcm-habilitation-electrique/)"] + [f"- [Habilitation électrique {x['sym']}]({SITE}/habilitation-electrique/{x['slug']}/): {x['resume']}" for x in SYMBOLES] + [""]
+L += ["## Habilitations électriques (FR)", f"- [Tous les symboles d'habilitation électrique par thème, avec quiz]({SITE}/habilitation-electrique/)", f"- [QCM habilitation électrique gratuit, examen blanc corrigé]({SITE}/qcm-habilitation-electrique/)"] + [f"- [{H1(x)}]({SITE}/habilitation-electrique/{x['slug']}/): {x['resume']}" for x in SYMBOLES] + [""]
 L += ["## Outils gratuits (FR)"] + [f"- [{c['title']}]({SITE}/calculateurs/{c['slug']}/): {c['desc']}" for c in CALCS] + [f"- [{m['title']}]({SITE}/modeles/{m['slug']}/): {m['desc']}" for m in MODELES] + [""]
 L += ["## Fiches terrain (FR)"] + [f"- [{f['title']}]({SITE}/fiches/{f['slug']}/): {f['desc']}" for f in FICHES] + [""]
 L += ["## Méthodes (FR)"] + [f"- [{m['title']}]({SITE}/methodes/{m['slug']}/): {m['desc']}" for m in METHODES] + [""]
 L += ["## Guides (EN)"] + [f"- [{g['title']}]({SITE}/en/guides/{g['slug']}/): {g['desc']}" for g in GUIDES_EN] + [f"- [{m['title']}]({SITE}/en/methods/{m['slug']}/): {m['desc']}" for m in METHODS_EN] + [""]
 L += ["## Territoires d'outre-mer (FR)"] + [f"- [{n}]({SITE}/{t}/)" for t, n in [("mayotte","Mayotte"),("la-reunion","La Réunion"),("guadeloupe","Guadeloupe"),("martinique","Martinique"),("guyane","Guyane")]]
 open(os.path.join(ROOT, "llms.txt"), "w").write("\n".join(L) + "\n")
+# garde-fou : contrôle qualité automatique après chaque génération
+import subprocess
+_r = subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "check.py"), ROOT])
+if _r.returncode:
+    sys.exit("ÉCHEC du contrôle qualité : corriger avant de publier.")
 print("ok")

@@ -20,3 +20,9 @@ Ajouts du 23/11/2026 (gérés par `gen.py`, ne pas retirer) :
 - Flux RSS : `/feed.xml` (FR) et `/en/feed.xml` (EN).
 - IndexNow : `.github/workflows/indexnow.yml` prévient Bing et les autres moteurs à chaque mise en ligne ; la clé est le fichier `<clé>.txt` à la racine (ne pas supprimer).
 - Outils gratuits : `calcs_fr.py` (calculateurs `/calculateurs/…` et modèles à imprimer `/modeles/…`). Schémas et repères chiffrés des fiches : `schemas_fr.py`. Images d'aperçu : `/og/` (générées).
+
+## Contrôle qualité (anti-bug)
+- `python3 outils/gen.py <racine>` lance automatiquement `outils/check.py` et s'arrête en cas d'erreur : ne jamais publier si « ÉCHEC du contrôle qualité » s'affiche.
+- Tests navigateur (largeur téléphone) : `python3 outils/check_browser.py http://localhost:8765 .` et `python3 outils/check_interactif.py http://localhost:8765` (serveur local `python3 -m http.server 8765`).
+- GitHub Action « Contrôle qualité du site » : refait les trois contrôles à chaque mise en ligne et chaque lundi.
+- Habilitations : données dans `outils/symboles_fr.py` (une entrée = une page + son quiz). Anciennes adresses regroupées redirigées via REDIRECTS.
