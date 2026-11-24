@@ -5,6 +5,7 @@ import contenu_fr_plus
 from contenu_fr_plus import METHODES
 from schemas_fr import SCHEMAS, CAS
 from calcs_fr import CALCS, MODELES
+from habilitations_fr import THEMES, LECTURE, QUIZ
 from PIL import Image, ImageDraw, ImageFont
 _F = "/usr/share/fonts/opentype/inter/"
 def make_og(name, kicker, title):
@@ -82,7 +83,7 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
         foot = FOOT
         loc = "fr_FR"
         switch = f'<a class="back" href="{alt}" hreflang="en" style="margin-left:14px">EN</a>' if alt else '<a class="back" href="/en/" hreflang="en" style="margin-left:14px">EN</a>'
-    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/", "/calculateurs/") or path.startswith("/calculateurs/") or path.startswith("/modeles/")):
+    if lang == "fr" and (og_type == "article" or path in ("/fiches/", "/methodes/", "/glossaire/", "/calculateur-cout-panne/", "/calculateurs/", "/habilitation-electrique/") or path.startswith("/calculateurs/") or path.startswith("/modeles/")):
         body += NL_CARD
     if og_type == "article":
         q = urllib.parse.quote(url, safe="")
@@ -459,6 +460,7 @@ page("/methodes/", "Méthodes de maintenance : guide complet — MaintenanceIQ",
 <h1>Méthodes de maintenance</h1>
 <p>Les fiches terrain résolvent un problème ; les méthodes organisent la maintenance pour qu’il ne revienne pas. Du plus simple au plus avancé, avec des exemples chiffrés.</p>
 <ul>{"".join(f'<li><a href="/methodes/{m["slug"]}/"><strong>{m["h1"]}</strong></a> <span class="niv {NIV_CLASS[m["niveau"]]}">{m["niveau"]}</span><br><span class="muted">{m["desc"]}</span></li>' for m in METHODES)}</ul>
+<div class="card"><strong>Nouveau :</strong> <a href="/habilitation-electrique/">tous les symboles d’habilitation électrique, par thème, avec un quiz</a>.</div>
 <div class="card">Voir aussi : les <a href="/fiches/">fiches terrain</a>, le <a href="/calculateur-cout-panne/">calculateur du coût d’une panne</a> et le <a href="/glossaire/">glossaire</a>.</div>''',
      [ORG, {"@type": "CollectionPage", "name": "Méthodes de maintenance", "url": SITE + "/methodes/",
             "hasPart": [{"@type": "Article", "headline": m["h1"], "url": SITE + f"/methodes/{m['slug']}/"} for m in METHODES]},
@@ -698,17 +700,69 @@ hub = ('<p class="muted"><a href="/">Accueil</a> › Outils gratuits</p><h1>Outi
        '<p>Des calculateurs qui font une seule chose, avec leur formule et un exemple chiffré, et des modèles à imprimer. Gratuits, sans inscription : tout se calcule sur votre téléphone.</p>'
        '<h2>Calculateurs</h2><ul><li><a href="/calculateur-cout-panne/"><strong>Calculer le coût d’une panne</strong></a><br><span class="muted">Production perdue, main-d’œuvre, pièces en urgence : ce que coûte vraiment un arrêt.</span></li>'
        + "".join(f'<li><a href="/calculateurs/{c["slug"]}/"><strong>{c["h1"]}</strong></a><br><span class="muted">{c["desc"]}</span></li>' for c in CALCS) + '</ul>'
+       '<h2>Fiche de révision</h2><ul><li><a href="/habilitation-electrique/"><strong>Habilitation électrique : tous les symboles + quiz</strong></a><br><span class="muted">B0, BR, BS, BC, B1V, B2V, H0V, BP, BF-HF, véhicules en L, rangés par thème.</span></li></ul>'
        '<h2>Modèles à imprimer</h2><ul>' + "".join(f'<li><a href="/modeles/{m["slug"]}/"><strong>{m["h1"]}</strong></a><br><span class="muted">{m["desc"]}</span></li>' for m in MODELES) + '</ul>'
        '<div class="card">Un outil vous manque ? Écrivez-nous sur <a href="https://wa.me/33698711848">WhatsApp</a> : les demandes les plus fréquentes sont ajoutées en priorité.</div>')
 page("/calculateurs/", "Outils gratuits de maintenance : calculateurs et modèles — MaintenanceIQ",
      "Calculateurs gratuits de maintenance (intensité moteur, chute de tension, MTBF, graissage, AMDEC, courroie, pression) et modèles à imprimer.", hub,
      [ORG, {"@type": "CollectionPage", "name": "Outils gratuits de maintenance", "url": SITE + "/calculateurs/", "inLanguage": "fr"}, crumbs([("Accueil", "/"), ("Outils gratuits", "/calculateurs/")])])
 
+
+# ---------- Habilitations électriques ----------
+def _hab():
+    import html as H
+    lect = "".join(f"<li><strong>{a}</strong> — {b}</li>" for a, b in LECTURE)
+    toc = "".join(f'<li><a href="#t{i}">{t[0]}</a></li>' for i, t in enumerate(THEMES))
+    secs = ""
+    for i, (titre, intro, rows) in enumerate(THEMES):
+        tr = "".join(f"<tr><td><strong>{s}</strong></td><td>{n}</td><td>{d}</td></tr>" for s, n, d in rows)
+        secs += f'<h2 id="t{i}">{titre}</h2><p>{intro}</p><div class="tw"><table><thead><tr><th>Symbole</th><th>Qui</th><th>Ce qu’il autorise</th></tr></thead><tbody>{tr}</tbody></table></div>'
+    qz = ""
+    for k, (q, opts, ok, ex) in enumerate(QUIZ):
+        bt = "".join(f'<button type="button" class="qopt" data-q="{k}" data-i="{j}" data-ok="{1 if j==ok else 0}">{o}</button>' for j, o in enumerate(opts))
+        qz += f'<div class="card quiz" id="q{k}"><p><strong>{k+1}. {q}</strong></p><div class="qopts">{bt}</div><p class="qex" hidden><span class="qv"></span> {ex}</p></div>'
+    faq = [(q, opts[ok] + ". " + ex) for q, opts, ok, ex in QUIZ]
+    js = ('<script>(function(){var done={},score=0,n=' + str(len(QUIZ)) + ';document.querySelectorAll(".qopt").forEach(function(b){b.addEventListener("click",function(){var q=b.dataset.q;if(done[q])return;done[q]=1;'
+          'var box=document.getElementById("q"+q);box.querySelectorAll(".qopt").forEach(function(o){o.disabled=true;if(o.dataset.ok==="1")o.classList.add("bon")});'
+          'if(b.dataset.ok==="1"){score++;box.querySelector(".qv").textContent="Bonne réponse."}else{b.classList.add("faux");box.querySelector(".qv").textContent="Pas tout à fait."}'
+          'box.querySelector(".qex").hidden=false;var c=Object.keys(done).length;document.getElementById("score").textContent="Score : "+score+" / "+c+(c===n?" — questionnaire terminé.":"")})})})()</script>')
+    body = f"""<p class="muted"><a href="/">Accueil</a> › <a href="/methodes/">Méthodes</a> › Habilitations électriques</p>
+<h1>Habilitation électrique : tous les symboles expliqués, par thème</h1>
+<p>B0, H0V, B1V, B2V, BR, BS, BC, BE Manœuvre, BP, BF-HF, B1L… Chaque symbole dit précisément ce qu’une personne a le droit de faire sur ou près d’une installation électrique. Voici la liste complète, rangée par thème, puis un questionnaire de 12 questions avec les réponses pour vérifier que tout est clair.</p>
+<div class="card"><strong>Rappel essentiel.</strong> L’habilitation n’est pas un diplôme : c’est l’<strong>employeur</strong> qui la délivre par écrit, après une formation adaptée et un avis favorable. Elle ne vaut que pour les opérations inscrites sur le titre, et se recycle en général tous les 3 ans.</div>
+<h2>Comment lire un symbole</h2><ul>{lect}</ul>
+<p>Exemple : <strong>B2V Essai</strong> = basse tension (B), chargé de travaux (2), au voisinage (V), autorisé à faire des essais (attribut).</p>
+<h2>Sommaire par thème</h2><ul>{toc}<li><a href="#quiz">Questionnaire avec réponses</a></li></ul>
+{secs}
+<h2>Quel symbole pour quel métier ?</h2><div class="tw"><table><thead><tr><th>Métier</th><th>Symbole le plus courant</th></tr></thead><tbody>
+<tr><td>Peintre, agent d’entretien, maçon en local électrique</td><td>B0 (H0 / H0V en haute tension)</td></tr>
+<tr><td>Technicien ou agent de maintenance industrielle</td><td>BR, souvent avec B1V / B2V et BC</td></tr>
+<tr><td>Électricien de chantier</td><td>B1V (exécutant) ou B2V (chef d’équipe)</td></tr>
+<tr><td>Opérateur de production qui réarme et redémarre</td><td>BE Manœuvre</td></tr>
+<tr><td>Installateur photovoltaïque</td><td>BP, avec B1V / B2V côté réseau</td></tr>
+<tr><td>Terrassier près de réseaux enterrés</td><td>BF-HF</td></tr>
+<tr><td>Mécanicien automobile sur véhicule électrique ou hybride</td><td>B0L, puis B1VL / B2VL / BCL selon les tâches</td></tr>
+</tbody></table></div>
+<h2 id="quiz">Questionnaire : testez-vous (12 questions)</h2>
+<p>Touchez une réponse : la bonne s’affiche avec l’explication.</p>
+<p class="card" id="score" aria-live="polite">Score : 0 / 0</p>
+{qz}
+<p class="muted">Page d’information. Seuls la norme NF C 18-510 (et NF C 18-550 pour les véhicules), votre formation et le titre délivré par votre employeur font foi. Sources : INRS (brochure ED 6127 et dossier Risques électriques).</p>
+<h2>Pour aller plus loin</h2><ul><li><a href="/methodes/">Les méthodes de maintenance</a></li><li><a href="/fiches/armoire-electrique-connexion-qui-chauffe/">Armoire électrique : connexion qui chauffe</a></li><li><a href="/calculateurs/intensite-moteur-triphase/">Calculer l’intensité d’un moteur triphasé</a></li><li><a href="/glossaire/">Glossaire</a></li></ul>{js}"""
+    url = SITE + "/habilitation-electrique/"
+    ld = [ORG, {"@type": "TechArticle", "headline": "Habilitation électrique : tous les symboles expliqués, par thème", "url": url, "inLanguage": "fr",
+                "author": {"@type": "Person", "name": "Abourare Sahali"}, "publisher": {"@id": SITE + "/#org"}, "datePublished": "2026-11-24", "dateModified": "2026-11-24", "image": SITE + "/og-image.png"},
+          {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},
+          crumbs([("Accueil", "/"), ("Méthodes", "/methodes/"), ("Habilitations électriques", "/habilitation-electrique/")])]
+    page("/habilitation-electrique/", "Habilitation électrique : tous les symboles (B0, BR, BS, BC, B1V, B2V, H0V, BP, B0L…) + quiz — MaintenanceIQ",
+         "Tous les symboles d’habilitation électrique NF C 18-510 et NF C 18-550 rangés par thème, avec un questionnaire de 12 questions et les réponses.", body, ld, og_type="article")
+_hab()
+
 # ---------- sitemap et llms.txt ----------
 urls = [("/", TODAY)] + [(f"/{t}/", TODAY) for t in ["mayotte","la-reunion","guadeloupe","martinique","guyane"]] + \
        [("/fiches/", TODAY)] + [(f"/fiches/{f['slug']}/", TODAY) for f in FICHES] + \
        [("/methodes/", TODAY)] + [(f"/methodes/{m['slug']}/", TODAY) for m in METHODES] + \
-       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY)] + \
+       [("/calculateur-cout-panne/", TODAY), ("/glossaire/", TODAY), ("/a-propos/", TODAY), ("/calculateurs/", TODAY), ("/habilitation-electrique/", TODAY)] + \
        [(f"/calculateurs/{c['slug']}/", TODAY) for c in CALCS] + [(f"/modeles/{m['slug']}/", TODAY) for m in MODELES] + \
        [("/en/", TODAY), ("/en/guides/", TODAY), ("/en/methods/", TODAY), ("/en/about/", TODAY), ("/en/downtime-cost-calculator/", TODAY)] + \
        [(f"/en/guides/{g['slug']}/", TODAY) for g in GUIDES_EN] + [(f"/en/methods/{m['slug']}/", TODAY) for m in METHODS_EN] + \
@@ -724,6 +778,7 @@ L = ["# MaintenanceIQ", "",
  "- [Accueil, diagnostic gratuit et offres](https://www.maintenanceiq.fr/)", "- [Fiches terrain](https://www.maintenanceiq.fr/fiches/)", "- [Méthodes de maintenance](https://www.maintenanceiq.fr/methodes/)",
  "- [Calculateur du coût d'une panne](https://www.maintenanceiq.fr/calculateur-cout-panne/)", "- [Glossaire](https://www.maintenanceiq.fr/glossaire/)", "- [À propos](https://www.maintenanceiq.fr/a-propos/)", "",
  "## English", "- [Home and plans](https://www.maintenanceiq.fr/en/)", "- [Troubleshooting guides](https://www.maintenanceiq.fr/en/guides/)", "- [Maintenance methods](https://www.maintenanceiq.fr/en/methods/)", "- [Downtime cost calculator](https://www.maintenanceiq.fr/en/downtime-cost-calculator/)", "- [About](https://www.maintenanceiq.fr/en/about/)", ""]
+L += ["## Habilitations électriques (FR)", f"- [Tous les symboles d'habilitation électrique par thème, avec quiz]({SITE}/habilitation-electrique/)", ""]
 L += ["## Outils gratuits (FR)"] + [f"- [{c['title']}]({SITE}/calculateurs/{c['slug']}/): {c['desc']}" for c in CALCS] + [f"- [{m['title']}]({SITE}/modeles/{m['slug']}/): {m['desc']}" for m in MODELES] + [""]
 L += ["## Fiches terrain (FR)"] + [f"- [{f['title']}]({SITE}/fiches/{f['slug']}/): {f['desc']}" for f in FICHES] + [""]
 L += ["## Méthodes (FR)"] + [f"- [{m['title']}]({SITE}/methodes/{m['slug']}/): {m['desc']}" for m in METHODES] + [""]

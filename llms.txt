@@ -21,6 +21,9 @@ Contact : sahali.prof@gmail.com · WhatsApp +33 6 98 71 18 48
 - [Downtime cost calculator](https://www.maintenanceiq.fr/en/downtime-cost-calculator/)
 - [About](https://www.maintenanceiq.fr/en/about/)
 
+## Habilitations électriques (FR)
+- [Tous les symboles d'habilitation électrique par thème, avec quiz](https://www.maintenanceiq.fr/habilitation-electrique/)
+
 ## Outils gratuits (FR)
 - [Calcul de l’intensité d’un moteur triphasé](https://www.maintenanceiq.fr/calculateurs/intensite-moteur-triphase/): Calculez gratuitement le courant absorbé par un moteur triphasé à partir de sa puissance, de la tension, du cos φ et du rendement. Formule et exemple.
 - [Calcul de la chute de tension dans un câble](https://www.maintenanceiq.fr/calculateurs/chute-de-tension-cable/): Calcul gratuit de la chute de tension en monophasé ou triphasé selon la longueur, la section, le courant et le cos φ, avec les limites de la NF C 15-100.
