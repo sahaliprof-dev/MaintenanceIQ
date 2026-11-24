@@ -255,7 +255,7 @@ page("/fiches/", "Fiches terrain de maintenance industrielle — MaintenanceIQ",
 # ---------- À propos ----------
 page("/a-propos/", "À propos de MaintenanceIQ — SAHALI",
      "MaintenanceIQ, créé par SAHALI, formé à la maintenance industrielle : un diagnostic simple, sur téléphone, pour les petits sites industriels d’outre-mer.",
-     '''<h1>À propos de MaintenanceIQ</h1>
+     '''<h1>À propos de MaintenanceIQ</h1><p><img src="/avatar-sahali.svg" width="140" height="140" alt="Avatar illustré de SAHALI, technicien de maintenance" style="display:block;border-radius:50%"></p>
 <p>MaintenanceIQ est une marque de <strong>SAHALI</strong>, entrepreneur individuel (nom commercial Atelier Calibre, SIREN 132 761 131) basé à Bourg-en-Bresse. Elle s’adresse aux petits sites industriels de Mayotte, de La Réunion, de la Guadeloupe, de la Martinique et de la Guyane.</p>
 <h2>Qui est derrière MaintenanceIQ</h2>
 <p>SAHALI a appris la maintenance là où les pannes coûtent : sur les lignes de production. Il a d’abord été conducteur de machines de filmage et de conditionnement dans l’agroalimentaire, puis opérateur et monteur dans l’industrie du poids lourd, avant d’assembler des châssis de camions frigorifiques en atelier.</p>
@@ -540,7 +540,7 @@ page("/en/methods/", "Maintenance methods explained — MaintenanceIQ",
 page("/en/about/", "About MaintenanceIQ — SAHALI",
      "MaintenanceIQ was created by SAHALI, trained in industrial maintenance, to help small sites and buildings diagnose failures early, by phone, worldwide.",
      '''<p class="muted"><a href="/en/">Home</a> › About</p>
-<h1>About MaintenanceIQ</h1>
+<h1>About MaintenanceIQ</h1><p><img src="/avatar-sahali.svg" width="140" height="140" alt="Illustrated avatar of SAHALI, maintenance technician" style="display:block;border-radius:50%"></p>
 <p>MaintenanceIQ is a brand of <strong>SAHALI</strong>, sole trader (trade name Atelier Calibre) based in France. It helps small industrial sites and buildings that have neither sensors nor maintenance software to spot failures early and act at the right time.</p>
 <h2>Who is behind MaintenanceIQ</h2>
 <p>SAHALI learned maintenance where failures cost money: on production lines. He worked as a machine operator on packaging lines in the food industry, then as an operator and fitter in the heavy-vehicle industry, before assembling refrigerated truck chassis.</p>
