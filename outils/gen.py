@@ -42,7 +42,7 @@ ROOT = sys.argv[1]
 SITE = "https://www.maintenanceiq.fr"
 WA = "https://wa.me/33698711848"
 NEWSLETTER = "https://f91f7b52.sibforms.com/serve/MUIFAE3mTHOHHnIqAx6XriVNf0kF2q94i1T1sqUD_fUxcWgm9xXpYHQdRz3DVkORU_Trk67I03HwSelgxsTai8I6QkUo0lNF5dvb2g8qNoxJ0LvPhV72kSb2pihQ2ooRTTA8CjpW8GoL322ZxPbguX6AelR780rlV9cmqvEyWNshj5CgfdPo_Gem0q8SmJ332ewyCTsXBWsARAnFAQ=="  # formulaire Brevo (liste « Votre première liste »)
-NL_CARD = ('<div class="card nl"><strong>Recevez 1 fiche de dépannage par semaine</strong><br>Une panne réelle expliquée simplement, gratuitement, dans votre boîte mail. Désinscription en 1 clic.<br>'
+NL_CARD = ('<div class="card nl"><strong>Recevez 1 fiche de dépannage par semaine</strong><br>Une panne réelle expliquée simplement, gratuitement, dans votre boîte mail. <strong>Cadeau à l’inscription : 2 fiches terrain du guide</strong> (tableau des seuils vert/jaune/orange/rouge et fiche machine). Désinscription en 1 clic.<br>'
            f'<a class="btn" href="{NEWSLETTER}" target="_blank" rel="noopener">Je m’inscris gratuitement</a></div>')
 TODAY = "2026-11-22"
 # Ne pas supprimer : code Google AdSense (compte ca-pub-6829528595387726)
@@ -136,7 +136,7 @@ OFFER = '''<h2>Comment commencer</h2>
 <li><strong>Diagnostic gratuit</strong> sur <a href="/#diagnostic">la page d’accueil</a> : choisissez la machine, cochez ce que vous constatez, obtenez un niveau d’urgence et quoi vérifier. Sans compte, sans capteur.</li>
 <li><strong>Pilote gratuit de 30 jours</strong> sur 5 machines, suivies avec vous à distance par téléphone ou WhatsApp. Aucun paiement demandé.</li>
 <li><strong>Abonnements sans engagement</strong> : Essentiel 45 € par mois (10 machines), Pro 70 € par mois (30 machines), Entreprise 120 € par mois (60 machines). <a href="/#pilote">Voir les offres</a>.</li>
-<li><strong>Guide « Diagnostiquer avant la panne »</strong> : 37 pages, 29 €, téléchargement immédiat. <a href="/ebook/extrait-diagnostiquer-avant-la-panne.pdf">Lire le chapitre 1 gratuitement</a> · <a href="/#pilote">Acheter le guide</a>.</li>
+<li><strong>Guide « Diagnostiquer avant la panne »</strong> : 37 pages, 29 €, téléchargement immédiat. <a href="/ebook/extrait-diagnostiquer-avant-la-panne.pdf">Lire les chapitres 1 et 2 gratuitement</a> · <a href="/#pilote">Acheter le guide</a>.</li>
 </ul>'''
 
 # ---------- Territoires ----------
@@ -231,7 +231,7 @@ fiche_body = '''<p class="muted"><a href="/fiches/">Fiches terrain</a> · publi�
 <p>Toujours respecter les consignes de sécurité du site : ne jamais intervenir sur une pompe en marche.</p>
 <div class="card"><strong>Un doute sur une pompe ?</strong><br>Faites le <a href="/#diagnostic">diagnostic gratuit</a> en 2 minutes, ou demandez l’avis de MaintenanceIQ.<br>
 <a class="btn" href="https://wa.me/33698711848" target="_blank" rel="noopener">Écrire sur WhatsApp</a></div>
-<p>Pour aller plus loin : <a href="/ebook/extrait-diagnostiquer-avant-la-panne.pdf">lisez gratuitement le chapitre 1</a> du guide « Diagnostiquer avant la panne » (37 pages, 29 €).</p>
+<p>Pour aller plus loin : <a href="/ebook/extrait-diagnostiquer-avant-la-panne.pdf">lisez gratuitement les chapitres 1 et 2</a> du guide « Diagnostiquer avant la panne » (37 pages, 29 €).</p>
 <p class="muted">Territoires : <a href="/mayotte/">Mayotte</a> · <a href="/la-reunion/">La Réunion</a> · <a href="/guadeloupe/">Guadeloupe</a> · <a href="/martinique/">Martinique</a> · <a href="/guyane/">Guyane</a></p>'''
 page("/fiches/cavitation-pompe/", "Pompe qui fait un bruit de gravier : la cavitation — MaintenanceIQ",
      "Bruit de gravier, vibration, baisse de débit : comment reconnaître la cavitation d’une pompe centrifuge, quoi vérifier et que faire avant la casse.",
@@ -332,7 +332,7 @@ for f in FICHES:
 {faq_html}
 <div class="card"><strong>Un doute sur cette machine ?</strong><br>Faites le <a href="/#diagnostic">diagnostic gratuit</a> en 2 minutes sur téléphone, ou demandez le <a href="/#demande-pilote">pilote gratuit de 30 jours</a> : nous suivons 5 machines avec vous, à distance.<br>
 <a class="btn" href="https://wa.me/33698711848" target="_blank" rel="noopener">Demander l’avis de MaintenanceIQ sur WhatsApp</a></div>
-<p>Pour aller plus loin : <a href="{EXTRAIT}">lisez gratuitement le chapitre 1</a> du guide « Diagnostiquer avant la panne » (37 pages, 29 €), qui détaille le diagnostic machine par machine.</p>
+<p>Pour aller plus loin : <a href="{EXTRAIT}">lisez gratuitement les chapitres 1 et 2</a> du guide « Diagnostiquer avant la panne » (37 pages, 29 €), qui détaille le diagnostic machine par machine.</p>
 <h2>Fiches liées</h2>
 <ul>{rel}</ul>
 <p class="muted">Territoires : <a href="/mayotte/">Mayotte</a> · <a href="/la-reunion/">La Réunion</a> · <a href="/guadeloupe/">Guadeloupe</a> · <a href="/martinique/">Martinique</a> · <a href="/guyane/">Guyane</a></p>'''
@@ -359,7 +359,7 @@ page("/fiches/", "Fiches terrain de maintenance industrielle — MaintenanceIQ",
 <p>Une fiche par problème réel, du plus simple au plus complexe : les signes qui doivent alerter, les causes probables et comment les vérifier, puis quoi faire avant la casse. {len(FICHES)} fiches pour les machines industrielles et les installations du bâtiment, avec un niveau de difficulté : <span class="niv n1">Simple</span> <span class="niv n2">Intermédiaire</span> <span class="niv n3">Avancé</span>. Pour organiser la maintenance, voir les <a href="/methodes/">méthodes</a>.</p>
 <p>Vous ne savez pas par où commencer ? Faites le <a href="/#diagnostic">diagnostic gratuit</a> ou <a href="/calculateur-cout-panne/">calculez ce que vous coûte une panne</a>.</p>
 {idx}
-<div class="card">Pour aller plus loin : <a href="{EXTRAIT}">lisez gratuitement le chapitre 1</a> du guide « Diagnostiquer avant la panne » (37 pages, 29 €).</div>''',
+<div class="card">Pour aller plus loin : <a href="{EXTRAIT}">lisez gratuitement les chapitres 1 et 2</a> du guide « Diagnostiquer avant la panne » (37 pages, 29 €).</div>''',
      [ORG, {"@type": "CollectionPage", "name": "Fiches terrain MaintenanceIQ", "url": SITE + "/fiches/",
             "hasPart": [{"@type": "TechArticle", "headline": x["h1"], "url": SITE + f"/fiches/{x['slug']}/"} for x in FICHES]},
       crumbs([("Accueil", "/"), ("Fiches terrain", "/fiches/")])], alt="/en/guides/")
@@ -917,7 +917,7 @@ open(os.path.join(ROOT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding
     "".join(f"<url><loc>{SITE}{u}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls) + "</urlset>\n")
 L = ["# MaintenanceIQ", "",
  "> Practical maintenance for industrial sites and buildings, worldwide, in French and English: troubleshooting guides from simple to complex, maintenance methods, a downtime cost calculator, and a remote condition-based follow-up service (free 30-day pilot). Brand of SAHALI (sole trader, trade name Atelier Calibre, France).", "",
- "Offres / Plans : pilote gratuit 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement, suivi à distance par WhatsApp ou e-mail dans tous les pays. Guide PDF « Diagnostiquer avant la panne » (37 pages, en français, 29 €) ; extrait gratuit : https://www.maintenanceiq.fr/ebook/extrait-diagnostiquer-avant-la-panne.pdf",
+ "Offres / Plans : pilote gratuit 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement, suivi à distance par WhatsApp ou e-mail dans tous les pays. Guide PDF « Diagnostiquer avant la panne » (37 pages, en français, 29 €) ; extrait gratuit (chapitres 1 et 2) : https://www.maintenanceiq.fr/ebook/extrait-diagnostiquer-avant-la-panne.pdf",
  "Ce que MaintenanceIQ ne fait pas : pas de capteurs, pas de connexion aux machines, pas de prédiction de date de panne, ne remplace pas un technicien sur place.",
  "Contact : sahali.prof@gmail.com · WhatsApp +33 6 98 71 18 48", "",
  "## Pages principales (FR)",

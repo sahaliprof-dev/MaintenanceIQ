@@ -2,7 +2,7 @@
 
 > Practical maintenance for industrial sites and buildings, worldwide, in French and English: troubleshooting guides from simple to complex, maintenance methods, a downtime cost calculator, and a remote condition-based follow-up service (free 30-day pilot). Brand of SAHALI (sole trader, trade name Atelier Calibre, France).
 
-Offres / Plans : pilote gratuit 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement, suivi à distance par WhatsApp ou e-mail dans tous les pays. Guide PDF « Diagnostiquer avant la panne » (37 pages, en français, 29 €) ; extrait gratuit : https://www.maintenanceiq.fr/ebook/extrait-diagnostiquer-avant-la-panne.pdf
+Offres / Plans : pilote gratuit 30 jours (5 machines) ; Essentiel 45 €/mois (10 machines) ; Pro 70 €/mois (30 machines) ; Entreprise 120 €/mois (60 machines), sans engagement, suivi à distance par WhatsApp ou e-mail dans tous les pays. Guide PDF « Diagnostiquer avant la panne » (37 pages, en français, 29 €) ; extrait gratuit (chapitres 1 et 2) : https://www.maintenanceiq.fr/ebook/extrait-diagnostiquer-avant-la-panne.pdf
 Ce que MaintenanceIQ ne fait pas : pas de capteurs, pas de connexion aux machines, pas de prédiction de date de panne, ne remplace pas un technicien sur place.
 Contact : sahali.prof@gmail.com · WhatsApp +33 6 98 71 18 48
 
