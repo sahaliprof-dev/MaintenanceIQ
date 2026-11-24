@@ -3,6 +3,36 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fiches_data import FICHES, FICHES_BY_SLUG
 import contenu_fr_plus
 from contenu_fr_plus import METHODES
+from schemas_fr import SCHEMAS
+from PIL import Image, ImageDraw, ImageFont
+_F = "/usr/share/fonts/opentype/inter/"
+def make_og(name, kicker, title):
+    """Image d'aperçu 1200x630 propre à chaque article (WhatsApp, LinkedIn, Facebook, Google)."""
+    out = os.path.join(ROOT, "og", name + ".png")
+    W, H = 1200, 630
+    im = Image.new("RGB", (W, H), "#21403A"); d = ImageDraw.Draw(im)
+    fk = ImageFont.truetype(_F + "Inter-SemiBold.otf", 28)
+    d.text((70, 64), kicker.upper(), font=fk, fill="#79D49B")
+    size = 68
+    while True:
+        ft = ImageFont.truetype(_F + "Inter-ExtraBold.otf", size)
+        words, lines, cur = title.split(), [], ""
+        for w in words:
+            t = (cur + " " + w).strip()
+            if d.textlength(t, font=ft) <= W - 140: cur = t
+            else: lines.append(cur); cur = w
+        lines.append(cur)
+        if len(lines) * size * 1.18 <= 330 or size <= 44: break
+        size -= 4
+    y = 140
+    for l in lines:
+        d.text((70, y), l, font=ft, fill="#F0F3E9"); y += int(size * 1.18)
+    for i, c in enumerate(["#3FA66A", "#E2B32C", "#E5832F", "#D9473B"]):
+        d.rounded_rectangle((70 + i * 70, 520, 126 + i * 70, 538), radius=9, fill=c)
+    d.text((W - 70, 516), "maintenanceiq.fr", font=fk, fill="#F0F3E9", anchor="ra")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    im.save(out, optimize=True)
+    return "/og/" + name + ".png"
 from contenu_en import GUIDES_EN, METHODS_EN
 FICHES_BY_SLUG.update({f["slug"]: f for f in FICHES})
 ROOT = sys.argv[1]
@@ -63,6 +93,13 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
                  f'<a href="https://www.facebook.com/sharer/sharer.php?u={q}" target="_blank" rel="noopener">Facebook</a> · '
                  f'<a href="mailto:?subject={urllib.parse.quote(title)}&amp;body={q}">E-mail</a> · '
                  f'<a href="#" onclick="navigator.clipboard&&navigator.clipboard.writeText(\'{url}\');this.textContent=\'{lab[2]}\';return false">{lab[1]}</a></div>')
+    og_img = "/og-image.png"
+    if og_type == "article":
+        kick = ("MaintenanceIQ · Troubleshooting guide" if "/guides/" in path else "MaintenanceIQ · Maintenance method") if lang == "en" else ("MaintenanceIQ · Fiche terrain" if path.startswith("/fiches/") else "MaintenanceIQ · Méthode de maintenance")
+        h = title[: -len(" — MaintenanceIQ")] if title.endswith(" — MaintenanceIQ") else title
+        og_img = make_og(path.strip("/").replace("/", "-"), kick, h)
+        for node in ld:
+            if isinstance(node, dict) and node.get("image") == SITE + "/og-image.png": node["image"] = SITE + og_img
     ldjson = json.dumps({"@context": "https://schema.org", "@graph": ld}, ensure_ascii=False)
     html = f'''<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><script>(function(l){{if(l.hostname!=="localhost"&&(l.protocol==="http:"||l.hostname==="maintenanceiq.fr"))l.replace("https://www.maintenanceiq.fr"+l.pathname+l.search+l.hash)}})(location)</script><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -71,7 +108,7 @@ def page(path, title, desc, body, ld, og_type="website", lang="fr", alt=None):
 <link rel="canonical" href="{url}">
 {hl}<meta property="og:type" content="{og_type}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="MaintenanceIQ">
 <meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:url" content="{url}">
-<meta property="og:image" content="{SITE}/og-image.png"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="{SITE}{og_img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.png" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/fonts.css"><link rel="stylesheet" href="/assets/pages.css">
 <script type="application/ld+json">{ldjson}</script>
@@ -258,6 +295,14 @@ def fr_date(d):
     y, m, j = d.split("-"); return f"{int(j)} {MONTHS[int(m)-1]} {y}"
 EXTRAIT = "/ebook/extrait-diagnostiquer-avant-la-panne.pdf"
 
+def schema_block(slug):
+    sc = SCHEMAS.get(slug)
+    if not sc: return ""
+    rep = "".join(f"<tr><td>{a}</td><td>{b}</td></tr>" for a, b in sc["reperes"])
+    return (f'<h2>En un coup d’œil</h2><figure class="schema">{sc["svg"]}<figcaption>{sc["legende"]}</figcaption></figure>'
+            f'<h2>Les repères chiffrés</h2><div class="tw"><table><thead><tr><th>Repère</th><th>Valeur indicative</th></tr></thead><tbody>{rep}</tbody></table></div>'
+            '<p class="muted">Valeurs courantes données à titre indicatif : la notice du constructeur et les consignes de votre site passent avant.</p>\n')
+
 for f in FICHES:
     rel = "".join(f'<li><a href="/fiches/{r}/">{FICHES_BY_SLUG[r]["h1"]}</a></li>' for r in f["related"])
     causes = "".join(f"<tr><td>{c}</td><td>{v}</td></tr>" for c, v in f["causes"])
@@ -270,7 +315,7 @@ for f in FICHES:
 <ul>{"".join(f"<li>{x}</li>" for x in f["signes"])}</ul>
 <h2>Causes probables et comment les vérifier</h2>
 <div class="tw"><table><thead><tr><th>Cause probable</th><th>Comment vérifier</th></tr></thead><tbody>{causes}</tbody></table></div>
-<h2>Que faire</h2>
+{schema_block(f["slug"])}<h2>Que faire</h2>
 <ol>{"".join(f"<li>{x}</li>" for x in f["faire"])}</ol>
 <div class="card"><strong>Sécurité d’abord.</strong> {f["secu"]} Les consignes de votre site et du constructeur passent toujours avant cette fiche.</div>
 <h2>Questions fréquentes</h2>

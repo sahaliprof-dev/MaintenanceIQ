@@ -33,3 +33,4 @@ h3{font:700 21px/1.2 var(--body);margin:22px 0 6px}
 .n1{background:#79D49B;color:#14201D}.n2{background:#F2CC55;color:#14201D}.n3{background:#F39A4C;color:#14201D}
 .top span{display:flex;align-items:center}
 .share a{font-weight:600;margin-right:2px}
+.schema{margin:18px 0;padding:14px;background:#fff;border:1px solid var(--line);border-radius:6px}.schema svg{display:block;width:100%;height:auto}.schema figcaption{margin-top:8px;font-size:15px;color:var(--muted)}
