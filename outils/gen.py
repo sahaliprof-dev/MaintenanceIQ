@@ -3,6 +3,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fiches_data import FICHES, FICHES_BY_SLUG
 import contenu_fr_plus
 from contenu_fr_plus import METHODES
+from fiches_lot3 import LOT3
+FICHES += LOT3
+from enrichi_fr import REPERES, CAS_TYPE
+from arbre_svg import arbre
 from schemas_fr import SCHEMAS, CAS
 from calcs_fr import CALCS, MODELES
 from habilitations_fr import THEMES, LECTURE, QUIZ
@@ -300,18 +304,32 @@ EXTRAIT = "/ebook/extrait-diagnostiquer-avant-la-panne.pdf"
 
 def cas_block(slug):
     c = CAS.get(slug)
-    if not c: return ""
+    if not c:
+        t = CAS_TYPE.get(slug)
+        if not t: return ""
+        titre, texte, lecon = t
+        return (f'<div class="card cas"><h2 style="margin-top:0">Cas type : {titre}</h2>'
+                '<p class="muted">Scénario illustratif construit à partir de situations courantes, pas un témoignage. '
+                'Vous avez vécu cette panne ? <a href="https://wa.me/33698711848">Envoyez-nous votre cas avec une photo</a> : les vrais cas remplacent les cas types, avec votre accord.</p>'
+                f'<p>{texte}</p><p><strong>Ce qu’il faut en retenir.</strong> {lecon}</p></div>\n')
     figs = "".join(f'<figure class="schema"><img src="{src}" alt="{alt}" width="800" height="1059" loading="lazy" style="width:100%;height:auto;border-radius:4px"><figcaption>{cap}</figcaption></figure>' for src, alt, cap in c["photos"])
     return (f'<div class="card cas"><h2 style="margin-top:0">{c["titre"]}</h2><p class="muted">Témoignage de <a href="/a-propos/">SAHALI</a>, auteur de MaintenanceIQ, photos prises par l’auteur.</p>'
             + "".join(f"<p>{t}</p>" for t in c["texte"]) + figs + f'<p><strong>Ce qu’il faut en retenir.</strong> {c["lecon"]}</p></div>\n')
 
 def schema_block(slug):
     sc = SCHEMAS.get(slug)
-    if not sc: return ""
-    rep = "".join(f"<tr><td>{a}</td><td>{b}</td></tr>" for a, b in sc["reperes"])
-    return (f'<h2>En un coup d’œil</h2><figure class="schema">{sc["svg"]}<figcaption>{sc["legende"]}</figcaption></figure>'
-            f'<h2>Les repères chiffrés</h2><div class="tw"><table><thead><tr><th>Repère</th><th>Valeur indicative</th></tr></thead><tbody>{rep}</tbody></table></div>'
-            '<p class="muted">Valeurs courantes données à titre indicatif : la notice du constructeur et les consignes de votre site passent avant.</p>\n')
+    f = FICHES_BY_SLUG[slug]
+    if sc:
+        fig = f'<figure class="schema">{sc["svg"]}<figcaption>{sc["legende"]}</figcaption></figure>'
+        rows = sc["reperes"]
+    else:
+        fig = (f'<figure class="schema">{arbre(f)}<figcaption>Le symptôme, puis les causes à vérifier dans l’ordre, '
+               'de la plus simple à la plus lourde. Le détail de chaque vérification est dans le tableau ci-dessus.</figcaption></figure>')
+        rows = REPERES.get(slug, [])
+    rep = "".join(f"<tr><td>{a}</td><td>{b}</td></tr>" for a, b in rows)
+    tab = (f'<h2>Les repères chiffrés</h2><div class="tw"><table><thead><tr><th>Repère</th><th>Valeur indicative</th></tr></thead><tbody>{rep}</tbody></table></div>'
+           '<p class="muted">Valeurs courantes données à titre indicatif : la notice du constructeur et les consignes de votre site passent avant.</p>\n') if rows else ""
+    return f'<h2>En un coup d’œil</h2>{fig}{tab}'
 
 for f in FICHES:
     rel = "".join(f'<li><a href="/fiches/{r}/">{FICHES_BY_SLUG[r]["h1"]}</a></li>' for r in f["related"])
